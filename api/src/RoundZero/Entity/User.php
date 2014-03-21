@@ -74,30 +74,6 @@ class User extends Base
         $this->email = $email;
     }
 
-    public function toArray()
-    {
-        return array(
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'created' => $this->created->format(\DateTime::ISO8601),
-        );
-    }
-
-    public function getTotalMadeForGroup(Group $group)
-    {
-        $query = $em->createQuery(
-            'SELECT COUNT(u.id) 
-            FROM RoundZero\Entity\Round r 
-            JOIN r.recipients u
-            WHERE r.creator = :creator
-            AND r.group = :group'
-        );
-        $query->setParameter('creator', $user);
-        $query->setParameter('group', $group);
-        $count = $query->getSingleScalarResult();
-    }
-
     public function setPassword($password)
     {
         $this->salt = uniqid(mt_rand(), true);
@@ -109,18 +85,27 @@ class User extends Base
         return $this->password == sha1($this->salt . $password);
     }
 
-    public function getTotalReceivedFromGroup(Group $group)
+    public function toArray()
     {
-        /*
-        SELECT COUNT(*) FROM rounds
-        INNER JOIN round_user ON rounds.id = round_user.round_id
-        WHERE round_user.user_id = ?
-        AND rounds.group_id = ?
-         */
+        return parent::toArray() + array(
+            'name' => $this->name,
+            'email' => $this->email,
+        );
     }
 
-    public function getBalanceForGroup(Group $group)
+    /**
+     * @PrePersist @PreUpdate
+     */
+    public function validate()
     {
-        return $this->getTotalReceivedFromGroup($group) - $this->getTotalMadeForGroup($group);
+        if ($this->name == null) {
+            throw new ValidateException('Name is required');
+        }
+        if ($this->email == null) {
+            throw new ValidateException('Email is required');
+        }
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            throw new ValidateException('Invalid email address');
+        }
     }
 }

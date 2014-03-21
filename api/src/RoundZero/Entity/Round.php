@@ -66,9 +66,7 @@ class Round extends Base
 
     public function toArray()
     {
-        return array(
-            'id' => $this->id,
-            'created' => $this->created->format(\DateTime::ISO8601),
+        return parent::toArray() + array(
             'creator' => $this->getCreator()->getId(),
             'group' => $this->getGroup()->getId(),
         );
