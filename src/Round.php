@@ -23,6 +23,12 @@ class Round
     protected $creator;
 
     /**
+     * @ManyToOne(targetEntity="Group", inversedBy="rounds")
+     * @var Group
+     */
+    protected $group;
+
+    /**
      * @ManyToMany(targetEntity="User")
      * @var User[]
      */
@@ -58,6 +64,16 @@ class Round
         $this->creator = $user;
     }
 
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    public function setGroup(Group $group)
+    {
+        $this->group = $group;
+    }
+
     public function getRecipients()
     {
         return $this->recipients;
@@ -79,6 +95,7 @@ class Round
             'id' => $this->id,
             'created' => $this->created->format(DateTime::ISO8601),
             'creator' => $this->getCreator()->getId(),
+            'group' => $this->getGroup()->getId(),
         );
     }
 }

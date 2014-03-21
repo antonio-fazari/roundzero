@@ -11,6 +11,12 @@ class Group
     protected $id;
 
     /**
+     * @Column(type="datetime")
+     * @var \DateTime
+     */
+    protected $created;
+
+    /**
      * @Column(type="string")
      * @var  string
      */
@@ -22,6 +28,12 @@ class Group
      */
     protected $members;
 
+    /**
+     * @OneToMany(targetEntity="Round", mappedBy="group")
+     * @var Round[]
+     */
+    protected $rounds;
+
     public function __construct()
     {
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
@@ -30,6 +42,16 @@ class Group
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTime $created)
+    {
+        $this->created = $created;
     }
 
     public function getName()
@@ -57,10 +79,16 @@ class Group
         $this->members->removeElement($user);
     }
 
+    public function getRounds()
+    {
+        return $this->rounds;
+    }
+
     public function toArray()
     {
         return array(
             'id' => $this->id,
+            'created' => $this->created->format(DateTime::ISO8601),
             'name' => $this->name,
         );
     }

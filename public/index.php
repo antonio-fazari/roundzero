@@ -1,5 +1,5 @@
 <?php
-require_once "../bootstrap.php";
+require_once __DIR__ . "/../bootstrap.php";
 
 $app = new \Slim\Slim();
 $app->response->headers->set('Content-Type', 'application/json');
@@ -79,21 +79,33 @@ $app->get('/v1/rounds', function () use ($entityManager, $app) {
 
 $app->post('/v1/rounds', function () use ($entityManager, $app) {
     $userId = $app->request->params('creator');
+    $groupId = $app->request->params('group');
 
-    if ($user = $entityManager->getRepository('User')->find($userId)) {
+    $user = $entityManager->getRepository('User')->find($userId);
+    $group = $entityManager->getRepository('Group')->find($groupId);
+
+    if (!$user) {
+        $app->response->setStatus(400);
+        echo json_encode(array(
+            'error' => "User $userId not found",
+        ));
+
+    } else if (!$group) {
+        $app->response->setStatus(400);
+        echo json_encode(array(
+            'error' => "Group $groupId not found",
+        ));
+
+    } else {
         $round = new Round();
         $round->setCreator($user);
+        $round->setGroup($group);
         $round->setCreated(new DateTime(date('Y-m-d H:i:s')));
 
         $entityManager->persist($round);
         $entityManager->flush();
 
         echo json_encode($round->toArray());
-    } else {
-        $app->response->setStatus(400);
-        echo json_encode(array(
-            'error' => "User $userId not found",
-        ));
     }
 });
 
