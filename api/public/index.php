@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../bootstrap.php";
 
+use RoundZero\ValidateException;
 use RoundZero\TokenAuth;
 use RoundZero\Entity\Token;
 use RoundZero\Entity\Group;
@@ -11,6 +12,18 @@ $app = new \Slim\Slim();
 $app->add(new TokenAuth($entityManager));
 
 $app->response->headers->set('Content-Type', 'application/json');
+
+$app->error(function (\Exception $e) use ($app) {
+    echo json_encode(array(
+        'error' => 'Application error',
+    ));
+});
+
+$app->notFound(function () use ($app) {
+    echo json_encode(array(
+        'error' => 'Not found',
+    ));
+});
 
 $app->post('/v1/authenticate', function () use ($entityManager, $app) {
     $user = $entityManager->getRepository('RoundZero\Entity\User')->findOneBy(array(
@@ -26,9 +39,7 @@ $app->post('/v1/authenticate', function () use ($entityManager, $app) {
 
         // Generate new token.
         $token = new Token();
-        $token->generateId();
         $token->setUser($user);
-        $token->setCreated(new DateTime(date('Y-m-d H:i:s')));
         $entityManager->persist($token);
         $entityManager->flush();
 
@@ -75,12 +86,19 @@ $app->post('/v1/users', function () use ($entityManager, $app) {
     $user->setName($app->request->params('name'));
     $user->setEmail($app->request->params('email'));
     $user->setPassword($app->request->params('password'));
-    $user->setCreated(new DateTime(date('Y-m-d H:i:s')));
 
-    $entityManager->persist($user);
-    $entityManager->flush();
+    try {
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-    echo json_encode($user->toArray());
+        echo json_encode($user->toArray());
+
+    } catch (ValidateException $e) {
+        $app->response->setStatus(400);
+        echo json_encode(array(
+            'error' => $e->getMessage(),
+        ));
+    }
 });
 
 $app->get('/v1/users/:id', function ($id) use ($entityManager, $app) {
@@ -96,15 +114,36 @@ $app->get('/v1/users/:id', function ($id) use ($entityManager, $app) {
 
 $app->put('/v1/users/:id', function ($id) use ($entityManager, $app) {
     if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
-        $user->setName($app->request->params('name'));
-        $user->setEmail($app->request->params('email'));
-        if ($password = $app->request->params('password')) {
-            $user->setPassword($password);
-        }
-        $entityManager->persist($user);
-        $entityManager->flush();
+        // Check if user being edited is logged in user.
+        if ($user == $app->user) {
+            if ($app->request->params('name')) {
+                $user->setName($name);
+            }
+            if ($email = $app->request->params('email')) {
+                $user->setEmail($email);
+            }
+            if ($password = $app->request->params('password')) {
+                $user->setPassword($password);
+            }
 
-        echo json_encode($user->toArray());
+            try {
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                echo json_encode($user->toArray());
+
+            } catch (ValidateException $e) {
+                $app->response->setStatus(400);
+                echo json_encode(array(
+                    'error' => $e->getMessage(),
+                ));
+            }
+        } else {
+            $app->response->setStatus(403);
+            echo json_encode(array(
+                'error' => "Not authorised to modify other users",
+            ));
+        }
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(
@@ -115,10 +154,18 @@ $app->put('/v1/users/:id', function ($id) use ($entityManager, $app) {
 
 $app->delete('/v1/users/:id', function ($id) use ($entityManager, $app) {
     if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
-        $entityManager->remove($user);
-        $entityManager->flush();
+        // Check if user being deleted is logged in user.
+        if ($user == $app->user) {
+            $entityManager->remove($user);
+            $entityManager->flush();
 
-        echo json_encode(true);
+            echo json_encode(true);
+        } else {
+            $app->response->setStatus(403);
+            echo json_encode(array(
+                'error' => "Not authorised to remove other users",
+            ));
+        }
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(
@@ -139,19 +186,10 @@ $app->get('/v1/rounds', function () use ($entityManager, $app) {
 });
 
 $app->post('/v1/rounds', function () use ($entityManager, $app) {
-    $userId = $app->request->params('creator');
     $groupId = $app->request->params('group');
-
-    $user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId);
     $group = $entityManager->getRepository('RoundZero\Entity\Group')->find($groupId);
 
-    if (!$user) {
-        $app->response->setStatus(400);
-        echo json_encode(array(
-            'error' => "User $userId not found",
-        ));
-
-    } elseif (!$group) {
+    if (!$group) {
         $app->response->setStatus(400);
         echo json_encode(array(
             'error' => "Group $groupId not found",
@@ -159,14 +197,21 @@ $app->post('/v1/rounds', function () use ($entityManager, $app) {
 
     } else {
         $round = new Round();
-        $round->setCreator($user);
+        $round->setCreator($app->user);
         $round->setGroup($group);
-        $round->setCreated(new DateTime(date('Y-m-d H:i:s')));
 
-        $entityManager->persist($round);
-        $entityManager->flush();
+        try {
+            $entityManager->persist($round);
+            $entityManager->flush();
 
-        echo json_encode($round->toArray());
+            echo json_encode($round->toArray());
+
+        } catch (ValidateException $e) {
+            $app->response->setStatus(400);
+            echo json_encode(array(
+                'error' => $e->getMessage(),
+            ));
+        }
     }
 });
 
@@ -181,35 +226,19 @@ $app->get('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
     }
 });
 
-$app->put('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
-        $userId = $app->request->params('creator');
-        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
-            $round->setCreator($user);
-            $entityManager->persist($round);
-            $entityManager->flush();
-
-            echo json_encode($round->toArray());
-        } else {
-            $app->response->setStatus(400);
-            echo json_encode(array(
-                'error' => "User $userId not found",
-            ));
-        }
-    } else {
-        $app->response->setStatus(404);
-        echo json_encode(array(
-            'error' => "Round $id not found",
-        ));
-    }
-});
-
 $app->delete('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
     if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
-        $entityManager->remove($round);
-        $entityManager->flush();
+        if ($round->getUser() == $app->user) {
+            $entityManager->remove($round);
+            $entityManager->flush();
 
-        echo json_encode(true);
+            echo json_encode(true);
+        } else {
+            $app->response->setStatus(404);
+            echo json_encode(array(
+                'error' => "Not authorised to remove other users' rounds",
+            ));
+        }
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(
@@ -292,12 +321,22 @@ $app->get('/v1/groups', function () use ($entityManager, $app) {
 $app->post('/v1/groups', function () use ($entityManager, $app) {
     $group = new Group();
     $group->setName($app->request->params('name'));
-    $group->setCreated(new DateTime(date('Y-m-d H:i:s')));
 
-    $entityManager->persist($group);
-    $entityManager->flush();
+    // Add current user by default.
+    $group->addMember($app->user);
 
-    echo json_encode($group->toArray());
+    try {
+        $entityManager->persist($group);
+        $entityManager->flush();
+
+        echo json_encode($group->toArray());
+
+    } catch (ValidateException $e) {
+        $app->response->setStatus(400);
+        echo json_encode(array(
+            'error' => $e->getMessage(),
+        ));
+    }
 });
 
 $app->get('/v1/groups/:id', function ($id) use ($entityManager, $app) {
@@ -316,10 +355,19 @@ $app->put('/v1/groups/:id', function ($id) use ($entityManager, $app) {
     $group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id);
     if ($group) {
         $group->setName($app->request->params('name'));
-        $entityManager->persist($group);
-        $entityManager->flush();
 
-        echo json_encode($group->toArray());
+        try {
+            $entityManager->persist($group);
+            $entityManager->flush();
+
+            echo json_encode($group->toArray());
+
+        } catch (ValidateException $e) {
+            $app->response->setStatus(400);
+            echo json_encode(array(
+                'error' => $e->getMessage(),
+            ));
+        }
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(
@@ -347,7 +395,40 @@ $app->get('/v1/groups/:id/members', function ($id) use ($entityManager, $app) {
     if ($group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id)) {
         $results = array();
         foreach ($group->getMembers() as $user) {
-            $results[] = $user->toArray();
+
+            // Todo: move to service class.
+
+            // Get quantity made.
+            $query = $entityManager->createQuery(
+                'SELECT COUNT(u.id) 
+                FROM RoundZero\Entity\Round r 
+                JOIN r.recipients u
+                WHERE u = :user
+                AND r.group = :group'
+            );
+            $query->setParameter('user', $user);
+            $query->setParameter('group', $group);
+            $received = $query->getSingleScalarResult();
+
+
+            // Get quantity received.
+            $query = $entityManager->createQuery(
+                'SELECT COUNT(u.id) 
+                FROM RoundZero\Entity\Round r 
+                JOIN r.recipients u
+                WHERE r.creator = :creator
+                AND r.group = :group'
+            );
+            $query->setParameter('creator', $user);
+            $query->setParameter('group', $group);
+            $made = $query->getSingleScalarResult();
+
+            $results[] = array(
+                'user' => $user->toArray(),
+                'made' => $made,
+                'received' => $received,
+                'balance' => $made - $received,
+            );
         }
 
         echo json_encode($results);
@@ -395,22 +476,6 @@ $app->delete('/v1/groups/:id/members/:userId', function ($id, $userId) use ($ent
                 'error' => "User $userId not found",
             ));
         }
-    } else {
-        $app->response->setStatus(404);
-        echo json_encode(array(
-            'error' => "Group $id not found",
-        ));
-    }
-});
-
-$app->get('/v1/groups/:id/rounds', function ($id) use ($entityManager, $app) {
-    if ($group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id)) {
-        $results = array();
-        foreach ($group->getRounds() as $round) {
-            $results[] = $round->toArray();
-        }
-
-        echo json_encode($results);
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(

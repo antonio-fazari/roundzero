@@ -3,15 +3,10 @@ namespace RoundZero\Entity;
 
 /**
  * @Entity @Table(name="users")
+ * @HasLifecycleCallbacks
  */
-class User
+class User extends Base
 {
-    /**
-     * @Id @Column(type="integer") @GeneratedValue 
-     * @var int
-     */
-    protected $id;
-
     /**
      * @Column(type="string")
      * @var string
@@ -59,11 +54,6 @@ class User
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getName()
     {
         return $this->name;
@@ -84,16 +74,6 @@ class User
         $this->email = $email;
     }
 
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTime $created)
-    {
-        $this->created = $created;
-    }
-
     public function toArray()
     {
         return array(
@@ -110,18 +90,12 @@ class User
             'SELECT COUNT(u.id) 
             FROM RoundZero\Entity\Round r 
             JOIN r.recipients u
-            WHERE r.creator_id = :creator_id
-            AND r.group_id = :group_id'
+            WHERE r.creator = :creator
+            AND r.group = :group'
         );
-        $query->setParameter('creator_id', $this->getId());
-        $query->setParameter('group_id', $group->getId());
+        $query->setParameter('creator', $user);
+        $query->setParameter('group', $group);
         $count = $query->getSingleScalarResult();
-        /*
-        SELECT COUNT(*) FROM rounds
-        INNER JOIN round_user ON rounds.id = round_user.round_id
-        WHERE rounds.creator_id = ?
-        AND rounds.group_id = ?
-         */
     }
 
     public function setPassword($password)

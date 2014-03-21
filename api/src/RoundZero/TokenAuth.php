@@ -18,7 +18,7 @@ class TokenAuth extends \Slim\Middleware
         if ($tokenId) {
             $token = $this->entityManager->getRepository('RoundZero\Entity\Token')->find($tokenId);
             if ($token) {
-                $env['user'] = $token->getUser();
+                $this->app->user = $token->getUser();
 
             } else {
                 $this->app->response->setStatus(403);

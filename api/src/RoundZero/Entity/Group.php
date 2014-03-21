@@ -1,26 +1,12 @@
 <?php
 namespace RoundZero\Entity;
 
-use RoundZero\Entity\Round;
-use RoundZero\Entity\User;
-
 /**
  * @Entity @Table(name="groups")
+ * @HasLifecycleCallbacks
  */
-class Group
+class Group extends Base
 {
-    /**
-     * @Id @Column(type="integer") @GeneratedValue
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * @Column(type="datetime")
-     * @var \DateTime
-     */
-    protected $created;
-
     /**
      * @Column(type="string")
      * @var  string
@@ -42,21 +28,6 @@ class Group
     public function __construct()
     {
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTime $created)
-    {
-        $this->created = $created;
     }
 
     public function getName()
@@ -91,10 +62,18 @@ class Group
 
     public function toArray()
     {
-        return array(
-            'id' => $this->id,
-            'created' => $this->created->format(\DateTime::ISO8601),
+        return parent::toArray() + array(
             'name' => $this->name,
         );
+    }
+
+    /**
+     * @PrePersist @PreUpdate
+     */
+    public function validate()
+    {
+        if ($this->name == null) {
+            throw new ValidateException('Name is required');
+        }
     }
 }

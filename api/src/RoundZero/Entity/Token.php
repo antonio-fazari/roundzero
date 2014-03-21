@@ -5,6 +5,7 @@ use RoundZero\Entity\User;
 
 /**
  * @Entity @Table(name="tokens")
+ * @HasLifecycleCallbacks
  */
 class Token
 {
@@ -36,11 +37,6 @@ class Token
         return $this->created;
     }
 
-    public function setCreated(\DateTime $created)
-    {
-        $this->created = $created;
-    }
-
     public function getUser()
     {
         return $this->user;
@@ -51,8 +47,13 @@ class Token
         $this->user = $user;
     }
 
-    public function generateId()
+    /**
+     * @PrePersist @PreUpdate
+     */
+    public function preSave()
     {
+        $time = new \DateTime(date('Y-m-d H:i:s'));
+        $this->created = $time;
         $this->id = bin2hex(openssl_random_pseudo_bytes(16));
     }
 }

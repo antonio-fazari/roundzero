@@ -1,37 +1,22 @@
 <?php
 namespace RoundZero\Entity;
 
-use RoundZero\Entity\Group;
-use RoundZero\Entity\User;
-
 /**
  * @Entity @Table(name="rounds")
  */
-class Round
+class Round extends Base
 {
     /**
-     * @Id @Column(type="integer") @GeneratedValue 
-     * @var  int
+     * @ManyToOne(targetEntity="Group", inversedBy="rounds")
+     * @var Group
      */
-    protected $id;
-
-    /**
-     * @Column(type="datetime")
-     * @var \DateTime
-     */
-    protected $created;
+    protected $group;
 
     /**
      * @ManyToOne(targetEntity="User", inversedBy="rounds")
      * @var User
      */
     protected $creator;
-
-    /**
-     * @ManyToOne(targetEntity="Group", inversedBy="rounds")
-     * @var Group
-     */
-    protected $group;
 
     /**
      * @ManyToMany(targetEntity="User")
@@ -42,21 +27,6 @@ class Round
     public function __construct()
     {
         $this->recipients = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTime $created)
-    {
-        $this->created = $created;
     }
 
     public function getCreator()
