@@ -22,6 +22,18 @@ class User
      * @Column(type="string")
      * @var string
      */
+    protected $password;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
+    protected $salt;
+
+    /**
+     * @Column(type="string")
+     * @var string
+     */
     protected $email;
 
     /**
@@ -87,18 +99,40 @@ class User
         return array(
             'id' => $this->id,
             'name' => $this->name,
+            'email' => $this->email,
             'created' => $this->created->format(\DateTime::ISO8601),
         );
     }
 
     public function getTotalMadeForGroup(Group $group)
     {
+        $query = $em->createQuery(
+            'SELECT COUNT(u.id) 
+            FROM RoundZero\Entity\Round r 
+            JOIN r.recipients u
+            WHERE r.creator_id = :creator_id
+            AND r.group_id = :group_id'
+        );
+        $query->setParameter('creator_id', $this->getId());
+        $query->setParameter('group_id', $group->getId());
+        $count = $query->getSingleScalarResult();
         /*
         SELECT COUNT(*) FROM rounds
         INNER JOIN round_user ON rounds.id = round_user.round_id
         WHERE rounds.creator_id = ?
         AND rounds.group_id = ?
          */
+    }
+
+    public function setPassword($password)
+    {
+        $this->salt = uniqid(mt_rand(), true);
+        $this->password = sha1($this->salt . $password);
+    }
+
+    public function authenticate($password)
+    {
+        return $this->password == sha1($this->salt . $password);
     }
 
     public function getTotalReceivedFromGroup(Group $group)

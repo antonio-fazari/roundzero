@@ -1,12 +1,63 @@
 <?php
 require_once __DIR__ . "/../bootstrap.php";
 
+use RoundZero\TokenAuth;
+use RoundZero\Entity\Token;
 use RoundZero\Entity\Group;
 use RoundZero\Entity\Round;
 use RoundZero\Entity\User;
 
 $app = new \Slim\Slim();
+$app->add(new TokenAuth($entityManager));
+
 $app->response->headers->set('Content-Type', 'application/json');
+
+$app->post('/v1/authenticate', function () use ($entityManager, $app) {
+    $user = $entityManager->getRepository('RoundZero\Entity\User')->findOneBy(array(
+        'email' => $app->request->params('email')
+    ));
+    if ($user && $user->authenticate($app->request->params('password'))) {
+        // Delete old token(s) for user.
+        $qb = $entityManager->createQueryBuilder();
+        $qb->delete('RoundZero\Entity\Token', 't');
+        $qb->andWhere($qb->expr()->eq('t.user', ':user'));
+        $qb->setParameter(':user', $user);
+        $qb->getQuery()->getResult();
+
+        // Generate new token.
+        $token = new Token();
+        $token->generateId();
+        $token->setUser($user);
+        $token->setCreated(new DateTime(date('Y-m-d H:i:s')));
+        $entityManager->persist($token);
+        $entityManager->flush();
+
+        echo json_encode(array(
+            'tokenId' => $token->getId(),
+            'user' => $user->toArray(),
+        ));
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "Incorrect login",
+        ));
+    }
+});
+
+$app->post('/v1/unauthenticate', function () use ($entityManager, $app) {
+    $token = $entityManager->getRepository('RoundZero\Entity\Token')->find($app->request->params('token'));
+    if ($user && $user->authenticate($app->request->params('password'))) {
+        $entityManager->remove($token);
+        $entityManager->flush();
+
+        echo json_encode(true);
+    } else {
+        $app->response->setStatus(403);
+        echo json_encode(array(
+            'error' => "Invalid token",
+        ));
+    }
+});
 
 // Users
 
@@ -22,6 +73,8 @@ $app->get('/v1/users', function () use ($entityManager, $app) {
 $app->post('/v1/users', function () use ($entityManager, $app) {
     $user = new User();
     $user->setName($app->request->params('name'));
+    $user->setEmail($app->request->params('email'));
+    $user->setPassword($app->request->params('password'));
     $user->setCreated(new DateTime(date('Y-m-d H:i:s')));
 
     $entityManager->persist($user);
@@ -44,6 +97,10 @@ $app->get('/v1/users/:id', function ($id) use ($entityManager, $app) {
 $app->put('/v1/users/:id', function ($id) use ($entityManager, $app) {
     if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
         $user->setName($app->request->params('name'));
+        $user->setEmail($app->request->params('email'));
+        if ($password = $app->request->params('password')) {
+            $user->setPassword($password);
+        }
         $entityManager->persist($user);
         $entityManager->flush();
 
