@@ -1,4 +1,9 @@
 <?php
+namespace RoundZero\Entity;
+
+use RoundZero\Entity\Group;
+use RoundZero\Entity\User;
+
 /**
  * @Entity @Table(name="rounds")
  */
@@ -93,7 +98,7 @@ class Round
     {
         return array(
             'id' => $this->id,
-            'created' => $this->created->format(DateTime::ISO8601),
+            'created' => $this->created->format(\DateTime::ISO8601),
             'creator' => $this->getCreator()->getId(),
             'group' => $this->getGroup()->getId(),
         );

@@ -1,4 +1,6 @@
 <?php
+namespace RoundZero\Entity;
+
 /**
  * @Entity @Table(name="users")
  */
@@ -87,5 +89,30 @@ class User
             'name' => $this->name,
             'created' => $this->created->format(\DateTime::ISO8601),
         );
+    }
+
+    public function getTotalMadeForGroup(Group $group)
+    {
+        /*
+        SELECT COUNT(*) FROM rounds
+        INNER JOIN round_user ON rounds.id = round_user.round_id
+        WHERE rounds.creator_id = ?
+        AND rounds.group_id = ?
+         */
+    }
+
+    public function getTotalReceivedFromGroup(Group $group)
+    {
+        /*
+        SELECT COUNT(*) FROM rounds
+        INNER JOIN round_user ON rounds.id = round_user.round_id
+        WHERE round_user.user_id = ?
+        AND rounds.group_id = ?
+         */
+    }
+
+    public function getBalanceForGroup(Group $group)
+    {
+        return $this->getTotalReceivedFromGroup($group) - $this->getTotalMadeForGroup($group);
     }
 }

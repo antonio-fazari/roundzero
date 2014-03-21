@@ -1,4 +1,9 @@
 <?php
+namespace RoundZero\Entity;
+
+use RoundZero\Entity\Round;
+use RoundZero\Entity\User;
+
 /**
  * @Entity @Table(name="groups")
  */
@@ -24,7 +29,7 @@ class Group
 
     /**
      * @ManyToMany(targetEntity="User")
-     * @var Users[]
+     * @var User[]
      */
     protected $members;
 
@@ -88,7 +93,7 @@ class Group
     {
         return array(
             'id' => $this->id,
-            'created' => $this->created->format(DateTime::ISO8601),
+            'created' => $this->created->format(\DateTime::ISO8601),
             'name' => $this->name,
         );
     }

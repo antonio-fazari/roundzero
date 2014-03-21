@@ -1,13 +1,17 @@
 <?php
 require_once __DIR__ . "/../bootstrap.php";
 
+use RoundZero\Entity\Group;
+use RoundZero\Entity\Round;
+use RoundZero\Entity\User;
+
 $app = new \Slim\Slim();
 $app->response->headers->set('Content-Type', 'application/json');
 
 // Users
 
 $app->get('/v1/users', function () use ($entityManager, $app) {
-    $users = $entityManager->getRepository('User')->findAll();
+    $users = $entityManager->getRepository('RoundZero\Entity\User')->findAll();
     $results = array();
     foreach ($users as $user) {
         $results[] = $user->toArray();
@@ -27,7 +31,7 @@ $app->post('/v1/users', function () use ($entityManager, $app) {
 });
 
 $app->get('/v1/users/:id', function ($id) use ($entityManager, $app) {
-    if ($user = $entityManager->getRepository('User')->find($id)) {
+    if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
         echo json_encode($user->toArray());
     } else {
         $app->response->setStatus(404);
@@ -38,7 +42,7 @@ $app->get('/v1/users/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->put('/v1/users/:id', function ($id) use ($entityManager, $app) {
-    if ($user = $entityManager->getRepository('User')->find($id)) {
+    if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
         $user->setName($app->request->params('name'));
         $entityManager->persist($user);
         $entityManager->flush();
@@ -53,7 +57,7 @@ $app->put('/v1/users/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->delete('/v1/users/:id', function ($id) use ($entityManager, $app) {
-    if ($user = $entityManager->getRepository('User')->find($id)) {
+    if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
         $entityManager->remove($user);
         $entityManager->flush();
 
@@ -69,7 +73,7 @@ $app->delete('/v1/users/:id', function ($id) use ($entityManager, $app) {
 // Rounds
 
 $app->get('/v1/rounds', function () use ($entityManager, $app) {
-    $rounds = $entityManager->getRepository('Round')->findAll();
+    $rounds = $entityManager->getRepository('RoundZero\Entity\Round')->findAll();
     $results = array();
     foreach ($rounds as $round) {
         $results[] = $round->toArray();
@@ -81,8 +85,8 @@ $app->post('/v1/rounds', function () use ($entityManager, $app) {
     $userId = $app->request->params('creator');
     $groupId = $app->request->params('group');
 
-    $user = $entityManager->getRepository('User')->find($userId);
-    $group = $entityManager->getRepository('Group')->find($groupId);
+    $user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId);
+    $group = $entityManager->getRepository('RoundZero\Entity\Group')->find($groupId);
 
     if (!$user) {
         $app->response->setStatus(400);
@@ -90,7 +94,7 @@ $app->post('/v1/rounds', function () use ($entityManager, $app) {
             'error' => "User $userId not found",
         ));
 
-    } else if (!$group) {
+    } elseif (!$group) {
         $app->response->setStatus(400);
         echo json_encode(array(
             'error' => "Group $groupId not found",
@@ -110,7 +114,7 @@ $app->post('/v1/rounds', function () use ($entityManager, $app) {
 });
 
 $app->get('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('Round')->find($id)) {
+    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
         echo json_encode($round->toArray());
     } else {
         $app->response->setStatus(404);
@@ -121,9 +125,9 @@ $app->get('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->put('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('Round')->find($id)) {
+    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
         $userId = $app->request->params('creator');
-        if ($user = $entityManager->getRepository('User')->find($userId)) {
+        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
             $round->setCreator($user);
             $entityManager->persist($round);
             $entityManager->flush();
@@ -144,7 +148,7 @@ $app->put('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->delete('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('Round')->find($id)) {
+    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
         $entityManager->remove($round);
         $entityManager->flush();
 
@@ -158,7 +162,7 @@ $app->delete('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->get('/v1/rounds/:id/recipients', function ($id) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('Round')->find($id)) {
+    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
         $results = array();
         foreach ($round->getRecipients() as $user) {
             $results[] = $user->toArray();
@@ -174,8 +178,8 @@ $app->get('/v1/rounds/:id/recipients', function ($id) use ($entityManager, $app)
 });
 
 $app->put('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('Round')->find($id)) {
-        if ($user = $entityManager->getRepository('User')->find($userId)) {
+    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
+        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
             $round->addRecipient($user);
             $entityManager->persist($round);
             $entityManager->flush();
@@ -196,8 +200,8 @@ $app->put('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($ent
 });
 
 $app->delete('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('Round')->find($id)) {
-        if ($user = $entityManager->getRepository('User')->find($userId)) {
+    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
+        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
             $round->removeRecipient($user);
             $entityManager->persist($round);
             $entityManager->flush();
@@ -220,7 +224,7 @@ $app->delete('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($
 // Groups
 
 $app->get('/v1/groups', function () use ($entityManager, $app) {
-    $groups = $entityManager->getRepository('Group')->findAll();
+    $groups = $entityManager->getRepository('RoundZero\Entity\Group')->findAll();
     $results = array();
     foreach ($groups as $group) {
         $results[] = $group->toArray();
@@ -240,7 +244,7 @@ $app->post('/v1/groups', function () use ($entityManager, $app) {
 });
 
 $app->get('/v1/groups/:id', function ($id) use ($entityManager, $app) {
-    $group = $entityManager->getRepository('Group')->find($id);
+    $group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id);
     if ($group) {
         echo json_encode($group->toArray());
     } else {
@@ -252,7 +256,7 @@ $app->get('/v1/groups/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->put('/v1/groups/:id', function ($id) use ($entityManager, $app) {
-    $group = $entityManager->getRepository('Group')->find($id);
+    $group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id);
     if ($group) {
         $group->setName($app->request->params('name'));
         $entityManager->persist($group);
@@ -268,7 +272,7 @@ $app->put('/v1/groups/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->delete('/v1/groups/:id', function ($id) use ($entityManager, $app) {
-    $group = $entityManager->getRepository('Group')->find($id);
+    $group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id);
     if ($group) {
         $entityManager->remove($group);
         $entityManager->flush();
@@ -283,7 +287,7 @@ $app->delete('/v1/groups/:id', function ($id) use ($entityManager, $app) {
 });
 
 $app->get('/v1/groups/:id/members', function ($id) use ($entityManager, $app) {
-    if ($group = $entityManager->getRepository('Group')->find($id)) {
+    if ($group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id)) {
         $results = array();
         foreach ($group->getMembers() as $user) {
             $results[] = $user->toArray();
@@ -299,8 +303,8 @@ $app->get('/v1/groups/:id/members', function ($id) use ($entityManager, $app) {
 });
 
 $app->put('/v1/groups/:id/members/:userId', function ($id, $userId) use ($entityManager, $app) {
-    if ($group = $entityManager->getRepository('Group')->find($id)) {
-        if ($user = $entityManager->getRepository('User')->find($userId)) {
+    if ($group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id)) {
+        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
             $group->addMember($user);
             $entityManager->persist($group);
             $entityManager->flush();
@@ -321,8 +325,8 @@ $app->put('/v1/groups/:id/members/:userId', function ($id, $userId) use ($entity
 });
 
 $app->delete('/v1/groups/:id/members/:userId', function ($id, $userId) use ($entityManager, $app) {
-    if ($group = $entityManager->getRepository('Group')->find($id)) {
-        if ($user = $entityManager->getRepository('User')->find($userId)) {
+    if ($group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id)) {
+        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
             $group->removeMember($user);
             $entityManager->persist($group);
             $entityManager->flush();
@@ -334,6 +338,22 @@ $app->delete('/v1/groups/:id/members/:userId', function ($id, $userId) use ($ent
                 'error' => "User $userId not found",
             ));
         }
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "Group $id not found",
+        ));
+    }
+});
+
+$app->get('/v1/groups/:id/rounds', function ($id) use ($entityManager, $app) {
+    if ($group = $entityManager->getRepository('RoundZero\Entity\Group')->find($id)) {
+        $results = array();
+        foreach ($group->getRounds() as $round) {
+            $results[] = $round->toArray();
+        }
+
+        echo json_encode($results);
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(
