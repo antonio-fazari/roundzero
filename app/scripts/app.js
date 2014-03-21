@@ -12,6 +12,10 @@ angular.module('roundzeroApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/account', {
+        templateUrl: 'views/account.html',
+        controller: 'MainCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
