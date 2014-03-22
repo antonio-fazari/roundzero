@@ -3,30 +3,89 @@
 </div>
 
 <div class="jumbotron">
-  <h1>Account</h1>
+  <h1>Edit account</h1>
   <p class="lead">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   </p>
 </div>
 
 <div class="row marketing">
-  <div class="well">
-    <h2>Drink preferences</h2>
-
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>Drink preferences</h2>
+    </div>
+    <div class="panel-body">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="btn btn-primary btn-sm pull-right" title="Default drink">
+              <span class="glyphicon glyphicon-star"></span> Default
+            </div>
+            <h3>Coffee</h3>
+          </div>
+          <div class="panel-body">
+            <label>Sugar</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></span>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></span>
+            </div>
+            <label>Milk</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></span>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></span>
+            </div>
+            <label>Notes</label>
+            <textarea class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="btn btn-default btn-sm pull-right">
+              <span class="glyphicon glyphicon-star"></span>
+            </div>
+            <h3>Tea</h3>
+          </div>
+          <div class="panel-body">
+            <label>Sugar</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></span>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></span>
+            </div>
+            <label>Milk</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-minus"></span></span>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></span>
+            </div>
+            <label>Notes</label>
+            <textarea class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="well">
-    <h2>Profile</h2>
-    <div class="input-group input-group-lg">
-      <input type="email" class="form-control" placeholder="email@example.com" disabled>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>Profile</h2>
     </div>
-    <div class="input-group input-group-lg">
-      <input type="text" class="form-control" placeholder="Nickname">
-    </div>
-    <div class="input-group input-group-lg">
-      <input type="password" class="form-control" placeholder="Change password">
-    </div>
-    <div class="input-group input-group-lg">
-      <input type="password" class="form-control" placeholder="Confirm password">
+    <div class="panel-body">
+      <div class="input-group input-group-lg">
+        <input type="email" class="form-control" placeholder="email@example.com" disabled>
+      </div>
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control" placeholder="Nickname">
+      </div>
+      <div class="input-group input-group-lg">
+        <input type="password" class="form-control" placeholder="Change password">
+      </div>
+      <div class="input-group input-group-lg">
+        <input type="password" class="form-control" placeholder="Confirm password">
+      </div>
     </div>
   </div>
   <a ng-href="#/account" class="btn btn-default btn-lg">Save</a>
