@@ -18,8 +18,8 @@
   </div>
   <div class="well">
     <div class="row">
-      <div class="col-sm-6 col-md-4">
-        <div class="thumbnail btn-primary clearfix">
+      <div ng-repeat="t in [1,2,3]" class="col-sm-6 col-md-4">
+        <div ng-if="t == 1" class="thumbnail clearfix btn-default active">
           <img src="http://lorempixel.com/300/200/cats/1">
           <div class="caption">
             <p><strong>Username</strong></p>
@@ -28,21 +28,9 @@
             <span class="glyphicon glyphicon-glass"></span>
           </div>
         </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="thumbnail clearfix">
-          <img src="http://lorempixel.com/300/200/cats/2">
-          <div class="caption">
-            <p><strong>Username</strong></p>
-          </div>
-          <div class="btn btn-default btn-sm pull-right" title="Default drink">
-            <span class="glyphicon glyphicon-glass"></span>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="thumbnail clearfix">
-          <img src="http://lorempixel.com/300/200/cats/3">
+
+        <div ng-if="t != 1" class="thumbnail clearfix">
+          <img src="http://lorempixel.com/300/200/cats/1">
           <div class="caption">
             <p><strong>Username</strong></p>
           </div>
@@ -53,5 +41,6 @@
       </div>
     </div>
   </div>
-  <a ng-href="#/order" class="btn btn-default btn-lg">Start round!</a>
+  <a ng-href="#/order" class="btn btn-primary btn-lg">Start round!</a>
+  <a ng-href="#/group" class="btn btn-default btn-lg">Cancel</a>
 </div>
