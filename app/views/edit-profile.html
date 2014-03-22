@@ -8,7 +8,7 @@
 <div class="jumbotron">
   <h1>Edit account</h1>
   <p class="lead">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   </p>
 </div>
 
@@ -22,7 +22,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <div class="btn btn-primary btn-sm pull-right" title="Default drink">
-              <span class="glyphicon glyphicon-glass"></span> Default
+              <span class="glyphicon glyphicon-star"></span> Default
             </div>
             <h3>Coffee</h3>
           </div>
@@ -45,7 +45,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <div class="btn btn-default btn-sm pull-right">
-              <span class="glyphicon glyphicon-glass"></span>
+              <span class="glyphicon glyphicon-star"></span>
             </div>
             <h3>Tea</h3>
           </div>
@@ -71,19 +71,24 @@
       <h2>Profile</h2>
     </div>
     <div class="panel-body">
-      <div class="input-group input-group-lg">
-        <input type="email" class="form-control" placeholder="email@example.com" disabled>
-      </div>
-      <div class="input-group input-group-lg">
-        <input type="text" class="form-control" placeholder="Nickname">
-      </div>
-      <div class="input-group input-group-lg">
-        <input type="password" class="form-control" placeholder="Change password">
-      </div>
-      <div class="input-group input-group-lg">
-        <input type="password" class="form-control" placeholder="Confirm password">
-      </div>
+      <form role="form">
+        <label>Nickname</label>
+        <div class="form-group">
+          <input type="text" class="form-control input-lg" placeholder="Nickname">
+        </div>
+        <label>Email</label>
+        <div class="form-group">
+          <input type="email" class="form-control input-lg" placeholder="email@example.com" disabled>
+        </div>
+        <label>Change password</label>
+        <div class="form-group">
+          <input type="password" class="form-control input-lg" placeholder="New password">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control input-lg" placeholder="Confirm new password">
+        </div>
+      </form>
     </div>
   </div>
-  <a ng-href="#/account" class="btn btn-default btn-lg">Save</a>
+  <a ng-href="#/account" class="btn btn-primary btn-lg">Save</a>
 </div>

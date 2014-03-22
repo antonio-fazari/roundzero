@@ -8,7 +8,7 @@
 <div class="jumbotron">
   <h1>Account</h1>
   <p class="lead">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   </p>
 </div>
 
@@ -21,7 +21,7 @@
       </div>
       <div class="panel-body">
         <ul class="list-group">
-          <li class="list-group-item"><a ng-href="#/group">Group name</a></li>
+          <li class="list-group-item clearfix"><a ng-href="#/group">Group name</a><a ng-href="#/add-group" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-pencil"></span></a></li>
         </ul>
       </div>
     </div>
@@ -29,16 +29,23 @@
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <a ng-href="#/edit-profile" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-edit"></span></a>
+        <a ng-href="#/edit-profile" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-pencil"></span></a>
         <h2>Profile</h2>
       </div>
       <div class="panel-body">
+        <label>Nickname</label>
+        <p>Fred</p>
+        <label>Email</label>
+        <p>test@example.com</p>
+        <label>Coffee <span class="glyphicon glyphicon-star"></span></label>
         <ul class="list-group">
           <li class="list-group-item">Cras justo odio</li>
           <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
+        </ul>
+        <label>Tea</label>
+        <ul class="list-group">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
         </ul>
       </div>
     </div>
