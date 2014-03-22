@@ -32,12 +32,16 @@ angular.module('roundzeroApp', [
         templateUrl: 'views/add-group.html',
         controller: 'MainCtrl'
       })
-      .when('/add-people', {
-        templateUrl: 'views/add-people.html',
-        controller: 'MainCtrl'
-      })
       .when('/group', {
         templateUrl: 'views/group.html',
+        controller: 'MainCtrl'
+      })
+      .when('/round', {
+        templateUrl: 'views/round.html',
+        controller: 'MainCtrl'
+      })
+      .when('/order', {
+        templateUrl: 'views/order.html',
         controller: 'MainCtrl'
       })
       .otherwise({
