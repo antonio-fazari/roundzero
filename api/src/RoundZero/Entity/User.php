@@ -77,12 +77,22 @@ class User extends Base
     public function setPassword($password)
     {
         $this->salt = uniqid(mt_rand(), true);
-        $this->password = sha1($this->salt . $password);
+        $this->password = crypt($password, $this->salt);
+    }
+
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    public function getRounds()
+    {
+        return $this->rounds;
     }
 
     public function authenticate($password)
     {
-        return $this->password == sha1($this->salt . $password);
+        return $this->password == crypt($password, $this->salt);
     }
 
     public function toArray()
