@@ -27,7 +27,8 @@ class TokenAuth extends \Slim\Middleware
                 ));
                 return;
             }
-        } elseif ($env['PATH_INFO'] != '/v1/authenticate') {
+        // Todo: ensure /v1/users is POST.
+        } elseif ($env['PATH_INFO'] != '/v1/authorize' &&  $env['PATH_INFO'] != '/v1/users') {
             $this->app->response->setStatus(403);
             echo json_encode(array(
                 'error' => "Authentication required",

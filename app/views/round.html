@@ -13,34 +13,29 @@
 </div>
 
 <div class="row marketing">
-  <div class="clearfix" style="margin-bottom: 20px;">
-    <a ng-href="#/ad-group" class="btn btn-default btn-lg pull-right"><span class="glyphicon glyphicon-edit"></span> Edit group</a>
-  </div>
-  <div class="well">
-    <div class="row">
-      <div ng-repeat="t in [1,2,3]" class="col-sm-6 col-md-4">
-        <div ng-if="t == 1" class="thumbnail clearfix btn-default active">
-          <img src="http://lorempixel.com/300/200/cats/1">
-          <div class="caption">
-            <p><strong>Username</strong></p>
-          </div>
-          <div class="btn btn-default btn-sm pull-right" title="Default drink">
-            <span class="glyphicon glyphicon-glass"></span>
-          </div>
+  <div class="row">
+    <div ng-repeat="t in [1,2,3]" class="col-sm-6 col-md-4">
+      <div ng-if="t == 1" class="thumbnail clearfix btn-default active">
+        <img src="http://lorempixel.com/300/200/cats/1">
+        <div class="caption">
+          <p><strong>Username</strong></p>
         </div>
+        <button type="button" class="btn btn-default btn-sm pull-right" title="Default drink">
+          <span class="glyphicon glyphicon-glass"></span> Coffee
+        </button>
+      </div>
 
-        <div ng-if="t != 1" class="thumbnail clearfix">
-          <img src="http://lorempixel.com/300/200/cats/1">
-          <div class="caption">
-            <p><strong>Username</strong></p>
-          </div>
-          <div class="btn btn-default btn-sm pull-right" title="Default drink">
-            <span class="glyphicon glyphicon-glass"></span>
-          </div>
+      <div ng-if="t != 1" class="thumbnail clearfix">
+        <img src="http://lorempixel.com/300/200/cats/1">
+        <div class="caption">
+          <p><strong>Username</strong></p>
         </div>
+        <button type="button" class="btn btn-default btn-sm pull-right" title="Default drink">
+          <span class="glyphicon glyphicon-glass"></span> Tea
+        </button>
       </div>
     </div>
   </div>
-  <a ng-href="#/order" class="btn btn-primary btn-lg">Start round!</a>
+  <a ng-href="#/order" class="btn btn-primary btn-lg">Take order</a>
   <a ng-href="#/group" class="btn btn-default btn-lg">Cancel</a>
 </div>
