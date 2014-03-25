@@ -4,14 +4,14 @@
 * [/v1/users/:id](#v1usersid)
 * [/v1/users/:id/memberships](#v1usersidmemberships)
 * [/v1/users/:id/rounds](#v1usersidrounds)
+* [/v1/users/:id/drink-preferences](#v1usersiddrinkpreferences)
 * [/v1/groups](#v1groups)
 * [/v1/groups/:id](#v1groupsid)
 * [/v1/groups/:id/memberships](#v1groupsidmemberships)
 * [/v1/groups/:id/memberships/:userId](#v1groupsidmembershipsuserId)
 * [/v1/groups/:id/rounds](#v1groupsidrounds)
 * [/v1/rounds/:id](#v1roundsid)
-* [/v1/rounds/:id/recipients](#v1roundsidrecipients)
-* [/v1/rounds/:id/recipients/:userId](#v1roundsidrecipientsuserId)
+* [/v1/rounds/:id/orders](#v1roundsidorders)
 
 /v1/authorize
 =============
@@ -204,6 +204,73 @@ token      | string     | API token            | Yes
 ### Response
 
 Array of round objects
+
+# /v1/users/:id/drink-preferences/
+
+## GET
+
+List all drink preferences for users.
+
+### Parameters
+
+Name       | Value      | Description          | Required
+---------- | ---------- | -------------------- | -------- 
+token      | string     | API token            | Yes
+
+### Response
+
+Array of drink preference objects
+
+## POST
+
+Create new drink preference for user.
+
+### Parameters
+
+Name       | Value      | Description          | Required
+---------- | ---------- | -------------------- | -------- 
+token      | string     | API token            | Yes
+type       | string     | Type of drink        | Yes
+sugars     | int        | Number of sugars     | No
+milk       | int        | Amount of milk       | No
+notes      | string     | Additional info      | No
+
+### Response
+
+New drink preference object
+
+
+# /v1/users/:id/drink-preferences/:preferenceId
+
+## PUT
+
+Update a drink preference
+
+### Parameters
+
+Name       | Value      | Description          | Required
+---------- | ---------- | -------------------- | -------- 
+token      | string     | API token            | Yes
+type       | string     | Type of drink        | Yes
+sugars     | int        | Number of sugars     | No
+milk       | int        | Amount of milk       | No
+notes      | string     | Additional info      | No
+
+### Response
+
+Updated drink preference object
+
+## Delete
+
+Remove a drink preference
+
+Name       | Value      | Description          | Required
+---------- | ---------- | -------------------- | -------- 
+token      | string     | API token            | Yes
+
+### Response
+
+Empty
 
 # /v1/groups
 
@@ -401,7 +468,7 @@ token      | string     | API token            | Yes
 Empty
 
 
-# /v1/rounds/:id/recipients
+# /v1/rounds/:id/orders
 
 ## GET
 
@@ -418,11 +485,11 @@ token      | string     | API token            | Yes
 Array of user objects
 
 
-# /v1/rounds/:id/recipients/:userId
+# /v1/rounds/:id/orders
 
-## PUT
+## GET
 
-Add a user as a recipient of a round
+List all orders in the round
 
 ### Parameters
 
@@ -432,13 +499,31 @@ token      | string     | API token            | Yes
 
 ### Response
 
-Empty
+Array of order objects
 
-## DELETE
+# /v1/rounds/:id/orders/:userId
 
-Remove a user as a recipient of a round
+## PUT
+
+Add a new order to the round
 
 ### Parameters
+
+Name       | Value      | Description          | Required
+---------- | ---------- | -------------------- | -------- 
+token      | string     | API token            | Yes
+type       | string     | Type of drink        | Yes
+sugars     | int        | Number of sugars     | No
+milk       | int        | Amount of milk       | No
+notes      | string     | Additional info      | No
+
+### Response
+
+Empty
+
+## Delete
+
+Remove an order from the round
 
 Name       | Value      | Description          | Required
 ---------- | ---------- | -------------------- | -------- 

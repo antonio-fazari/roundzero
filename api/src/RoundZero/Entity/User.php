@@ -49,9 +49,16 @@ class User extends Base
      */
     protected $groups;
 
+    /**
+     * @Id @OneToMany(targetEntity="DrinkPreference", mappedBy="user")
+     * @var DrinkPreference[]
+     */
+    protected $drinkPreferences;
+
     public function __construct()
     {
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drinkPreferences = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getName()
@@ -88,6 +95,22 @@ class User extends Base
     public function getRounds()
     {
         return $this->rounds;
+    }
+
+    public function getDrinkPreferences()
+    {
+        return $this->drinkPreferences;
+    }
+
+    public function addDrinkPreference(DrinkPreference $drinkPreference)
+    {
+        $drinkPreference->setUser($this);
+        return $this->drinkPreferences[] = $drinkPreference;
+    }
+
+    public function removeDrinkPreference(DrinkPreference $drinkPreference)
+    {
+        $this->drinkPreferences->removeElement($drinkPreference);
     }
 
     public function authenticate($password)

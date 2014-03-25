@@ -19,14 +19,14 @@ class Round extends Base
     protected $creator;
 
     /**
-     * @ManyToMany(targetEntity="User")
-     * @var User[]
+     * @OneToMany(targetEntity="Order", mappedBy="round")
+     * @var Order[]
      */
-    protected $recipients;
+    protected $orders;
 
     public function __construct()
     {
-        $this->recipients = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getCreator()
@@ -49,19 +49,19 @@ class Round extends Base
         $this->group = $group;
     }
 
-    public function getRecipients()
+    public function getOrders()
     {
-        return $this->recipients;
+        return $this->orders;
     }
 
-    public function addRecipient(User $user)
+    public function addOrder(Order $order)
     {
-        $this->recipients[] = $user;
+        $this->orders[] = $order;
     }
 
-    public function removeRecipient(User $user)
+    public function removeOrder(Order $order)
     {
-        $this->recipients->removeElement($user);
+        $this->orders->removeElement($order);
     }
 
     public function toArray()
