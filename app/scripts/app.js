@@ -24,10 +24,6 @@ angular.module('roundzeroApp', [
         templateUrl: 'views/account.html',
         controller: 'MainCtrl'
       })
-      .when('/edit-profile', {
-        templateUrl: 'views/edit-profile.html',
-        controller: 'MainCtrl'
-      })
       .when('/add-group', {
         templateUrl: 'views/add-group.html',
         controller: 'MainCtrl'

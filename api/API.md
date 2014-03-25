@@ -31,7 +31,7 @@ password   | string     | Plain text password  | Yes
 
 API token and authorised account details.
 
-```
+```json
 {
     "tokenId": "52035133d6745e42fe45d32094580554",
     "user": {
@@ -160,6 +160,7 @@ token      | string     | API token            | Yes
 
 Array of group objects and membership statistics
 
+```json
 [
     {
         "group": {
@@ -188,6 +189,7 @@ Array of group objects and membership statistics
         }
     }
 ]
+```
 
 # /v1/users/:id/rounds
 
@@ -365,7 +367,7 @@ token      | string     | API token            | Yes
 
 Array of user objects and their membership stats.
 
-```
+```json
 [
     {
         "user": {
