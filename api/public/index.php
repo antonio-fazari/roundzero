@@ -214,6 +214,107 @@ $app->get('/v1/users/:id/rounds', function ($id) use ($entityManager, $app) {
     }
 });
 
+$app->get('/v1/user/:id/order-preferences', function ($id) use ($entityManager, $app) {
+    if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
+        $results = array();
+        foreach ($user->getOrderPreferences() as $order) {
+            $results[] = $order->toArray();
+        }
+
+        echo json_encode($results);
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "User $id not found",
+        ));
+    }
+});
+
+$app->post('/v1/user/:id/order-preferences', function () use ($entityManager, $app) {
+    if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
+        $orderPreference = new OrderPreference();
+        $orderPreference->setUser($user);
+        $orderPreference->setType($app->request->params('type'));
+        $orderPreference->setSugars($app->request->params('sugars'));
+        $orderPreference->setMilk($app->request->params('notes'));
+
+        try {
+            $entityManager->persist($orderPreference);
+            $entityManager->flush();
+
+            $app->response->setStatus(201);
+            $app->response->headers->set('Location', '/v1/order-preferences/' . $orderPreference->getId());
+            echo json_encode($order->toArray());
+
+        } catch (ValidateException $e) {
+            $app->response->setStatus(400);
+            echo json_encode(array(
+                'error' => $e->getMessage(),
+            ));
+        }
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "User $id not found",
+        ));
+    }
+});
+
+$app->get('/v1/order-preferences/:id', function ($id) use ($entityManager, $app) {
+    $orderPreference = $entityManager->getRepository('RoundZero\Entity\OrderPreference')->find($id);
+    if ($orderPreference) {
+        echo json_encode($orderPreference->toArray());
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "OrderPreference $id not found",
+        ));
+    }
+});
+
+$app->put('/v1/order-preferences/:id', function ($id) use ($entityManager, $app) {
+    $orderPreference = $entityManager->getRepository('RoundZero\Entity\OrderPreference')->find($id);
+    if ($orderPreference) {
+        $orderPreference->setType($app->request->params('type'));
+        $orderPreference->setSugars($app->request->params('sugars'));
+        $orderPreference->setMilk($app->request->params('notes'));
+
+        try {
+            $entityManager->persist($orderPreference);
+            $entityManager->flush();
+
+            echo json_encode($orderPreference->toArray());
+
+        } catch (ValidateException $e) {
+            $app->response->setStatus(400);
+            echo json_encode(array(
+                'error' => $e->getMessage(),
+            ));
+        }
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "OrderPreference $id not found",
+        ));
+    }
+});
+
+$app->delete('/v1/order-preferences/:id', function ($id) use ($entityManager, $app) {
+    $orderPreference = $entityManager->getRepository('RoundZero\Entity\OrderPreference')->find($id);
+    if ($orderPreference) {
+        $entityManager->remove($orderPreference);
+        $entityManager->flush();
+
+        $app->response->setStatus(204);
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "OrderPreference $id not found",
+        ));
+    }
+});
+
+
 // Groups
 
 $app->get('/v1/groups', function () use ($entityManager, $app) {
@@ -445,11 +546,11 @@ $app->delete('/v1/rounds/:id', function ($id) use ($entityManager, $app) {
     }
 });
 
-$app->get('/v1/rounds/:id/recipients', function ($id) use ($entityManager, $app) {
+$app->get('/v1/rounds/:id/orders', function ($id) use ($entityManager, $app) {
     if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
         $results = array();
-        foreach ($round->getRecipients() as $user) {
-            $results[] = $user->toArray();
+        foreach ($round->getOrders() as $order) {
+            $results[] = $order->toArray();
         }
 
         echo json_encode($results);
@@ -461,14 +562,31 @@ $app->get('/v1/rounds/:id/recipients', function ($id) use ($entityManager, $app)
     }
 });
 
-$app->put('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($entityManager, $app) {
+$app->post('/v1/rounds/:id/orders', function () use ($entityManager, $app) {
     if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
+        $userId = $app->request->params('user');
         if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
-            $round->addRecipient($user);
-            $entityManager->persist($round);
-            $entityManager->flush();
+            $order = new Order();
+            $order->setRound($round);
+            $order->setUser($user);
+            $order->setType($app->request->params('type'));
+            $order->setSugars($app->request->params('sugars'));
+            $order->setMilk($app->request->params('notes'));
 
-            $app->response->setStatus(204);
+            try {
+                $entityManager->persist($order);
+                $entityManager->flush();
+
+                $app->response->setStatus(201);
+                $app->response->headers->set('Location', '/v1/orders/' . $order->getId());
+                echo json_encode($order->toArray());
+
+            } catch (ValidateException $e) {
+                $app->response->setStatus(400);
+                echo json_encode(array(
+                    'error' => $e->getMessage(),
+                ));
+            }
         } else {
             $app->response->setStatus(400);
             echo json_encode(array(
@@ -483,24 +601,56 @@ $app->put('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($ent
     }
 });
 
-$app->delete('/v1/rounds/:id/recipients/:userId', function ($id, $userId) use ($entityManager, $app) {
-    if ($round = $entityManager->getRepository('RoundZero\Entity\Round')->find($id)) {
-        if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($userId)) {
-            $round->removeRecipient($user);
-            $entityManager->persist($round);
+$app->get('/v1/orders/:id', function ($id) use ($entityManager, $app) {
+    $order = $entityManager->getRepository('RoundZero\Entity\Order')->find($id);
+    if ($order) {
+        echo json_encode($order->toArray());
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "Order $id not found",
+        ));
+    }
+});
+
+$app->put('/v1/orders/:id', function ($id) use ($entityManager, $app) {
+    $order = $entityManager->getRepository('RoundZero\Entity\Order')->find($id);
+    if ($order) {
+        $order->setType($app->request->params('type'));
+        $order->setSugars($app->request->params('sugars'));
+        $order->setMilk($app->request->params('notes'));
+
+        try {
+            $entityManager->persist($order);
             $entityManager->flush();
 
-            $app->response->setStatus(204);
-        } else {
+            echo json_encode($order->toArray());
+
+        } catch (ValidateException $e) {
             $app->response->setStatus(400);
             echo json_encode(array(
-                'error' => "User $userId not found",
+                'error' => $e->getMessage(),
             ));
         }
     } else {
         $app->response->setStatus(404);
         echo json_encode(array(
-            'error' => "Round $id not found",
+            'error' => "Order $id not found",
+        ));
+    }
+});
+
+$app->delete('/v1/orders/:id', function ($id) use ($entityManager, $app) {
+    $order = $entityManager->getRepository('RoundZero\Entity\Order')->find($id);
+    if ($order) {
+        $entityManager->remove($order);
+        $entityManager->flush();
+
+        $app->response->setStatus(204);
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array(
+            'error' => "Order $id not found",
         ));
     }
 });

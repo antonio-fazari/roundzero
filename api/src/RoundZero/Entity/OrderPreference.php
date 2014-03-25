@@ -2,10 +2,10 @@
 namespace RoundZero\Entity;
 
 /**
- * @Entity @Table(name="drink_preferences")
+ * @Entity @Table(name="order_preferences")
  * @HasLifecycleCallbacks
  */
-class DrinkPreference extends Base
+class OrderPreference extends Base
 {
     /**
      * @ManyToOne(targetEntity="User")

@@ -4,16 +4,16 @@ namespace RoundZero\Entity;
 /**
  * @Entity @Table(name="orders")
  */
-class Order
+class Order extends Base
 {
     /**
-     * @Id @ManyToOne(targetEntity="Round", inversedBy="orders")
+     * @ManyToOne(targetEntity="Round", inversedBy="orders")
      * @var Round
      */
     protected $round;
 
     /**
-     * @Id @ManyToOne(targetEntity="User")
+     * @ManyToOne(targetEntity="User")
      * @var User
      */
     protected $user;
@@ -104,7 +104,7 @@ class Order
 
     public function toArray()
     {
-        return array(
+        return parent::toArray() + array(
             'round' => $this->getRound()->getId(),
             'user' => $this->getUser()->getId(),
             'type' => $this->type,

@@ -4,7 +4,8 @@
 * [/v1/users/:id](#v1usersid)
 * [/v1/users/:id/memberships](#v1usersidmemberships)
 * [/v1/users/:id/rounds](#v1usersidrounds)
-* [/v1/users/:id/drink-preferences](#v1usersiddrinkpreferences)
+* [/v1/users/:id/order-preferences](#v1usersidorderpreferences)
+* [/v1/order-preferences/:id](#v1orderpreferencesid)
 * [/v1/groups](#v1groups)
 * [/v1/groups/:id](#v1groupsid)
 * [/v1/groups/:id/memberships](#v1groupsidmemberships)
@@ -12,6 +13,7 @@
 * [/v1/groups/:id/rounds](#v1groupsidrounds)
 * [/v1/rounds/:id](#v1roundsid)
 * [/v1/rounds/:id/orders](#v1roundsidorders)
+* [/v1/orders/:id](#v1ordersid)
 
 /v1/authorize
 =============
@@ -207,11 +209,11 @@ token      | string     | API token            | Yes
 
 Array of round objects
 
-# /v1/users/:id/drink-preferences/
+# /v1/users/:id/order-preferences/
 
 ## GET
 
-List all drink preferences for users.
+List all of the user's order preferences
 
 ### Parameters
 
@@ -221,50 +223,50 @@ token      | string     | API token            | Yes
 
 ### Response
 
-Array of drink preference objects
+Array of order preference objects
 
 ## POST
 
-Create new drink preference for user.
+Create new order preference for user.
 
 ### Parameters
 
 Name       | Value      | Description          | Required
 ---------- | ---------- | -------------------- | -------- 
 token      | string     | API token            | Yes
-type       | string     | Type of drink        | Yes
+type       | string     | Type of order        | Yes
 sugars     | int        | Number of sugars     | No
 milk       | int        | Amount of milk       | No
 notes      | string     | Additional info      | No
 
 ### Response
 
-New drink preference object
+New order preference object
 
 
-# /v1/users/:id/drink-preferences/:preferenceId
+# /v1/order-preferences/:id
 
 ## PUT
 
-Update a drink preference
+Update a order preference
 
 ### Parameters
 
 Name       | Value      | Description          | Required
 ---------- | ---------- | -------------------- | -------- 
 token      | string     | API token            | Yes
-type       | string     | Type of drink        | Yes
+type       | string     | Type of order        | Yes
 sugars     | int        | Number of sugars     | No
 milk       | int        | Amount of milk       | No
 notes      | string     | Additional info      | No
 
 ### Response
 
-Updated drink preference object
+Updated order preference object
 
 ## Delete
 
-Remove a drink preference
+Remove a order preference
 
 Name       | Value      | Description          | Required
 ---------- | ---------- | -------------------- | -------- 
@@ -474,7 +476,7 @@ Empty
 
 ## GET
 
-List all users who received a drink in a given round.
+List all users who received a order in a given round.
 
 ### Parameters
 
@@ -503,9 +505,7 @@ token      | string     | API token            | Yes
 
 Array of order objects
 
-# /v1/rounds/:id/orders/:userId
-
-## PUT
+## POST
 
 Add a new order to the round
 
@@ -514,18 +514,40 @@ Add a new order to the round
 Name       | Value      | Description          | Required
 ---------- | ---------- | -------------------- | -------- 
 token      | string     | API token            | Yes
-type       | string     | Type of drink        | Yes
+user       | int        | User Id              | Yes
+type       | string     | Type of order        | Yes
 sugars     | int        | Number of sugars     | No
 milk       | int        | Amount of milk       | No
 notes      | string     | Additional info      | No
 
 ### Response
 
-Empty
+New order object
+
+
+# /v1/orders/:id
+
+## PUT
+
+Update an order
+
+### Parameters
+
+Name       | Value      | Description          | Required
+---------- | ---------- | -------------------- | -------- 
+token      | string     | API token            | Yes
+type       | string     | Type of order        | Yes
+sugars     | int        | Number of sugars     | No
+milk       | int        | Amount of milk       | No
+notes      | string     | Additional info      | No
+
+### Response
+
+Updated order object
 
 ## Delete
 
-Remove an order from the round
+Remove an order
 
 Name       | Value      | Description          | Required
 ---------- | ---------- | -------------------- | -------- 
