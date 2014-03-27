@@ -15,9 +15,9 @@
 <div class="row marketing">
   <div class="row">
     <div class="list-group">
-      <a href="#/round" class="list-group-item clearfix" ng-repeat="t in [1,2,3,4,5]" ng-class="{active: t == 1 }">
-        <img style="float:left; margin-right:20px;"src="http://lorempixel.com/105/105/cats/{{t}}">
-        <h4 class="list-group-item-heading">Person number {{t}}</h4>
+      <div class="list-group-item clearfix" ng-repeat="person in testPeople" ng-class="{'bg-highlight': person.id == 1 }">
+        <img style="float:left; margin-right:20px;"src="http://lorempixel.com/105/105/cats/{{person.id}}">
+        <h4 class="list-group-item-heading">{{person.name}}</h4>
         <select class="form-control" style="max-width: 200px; margin: 10px 0;">
           <option value="none">- None -</option>
           <option value="one">Coffee: 2 sugars, milk</option>
@@ -25,9 +25,9 @@
           <option value="three">Coffee: 1 sugar, milk</option>
         </select>
         <button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> New drink preference</button>
-      </a>
+      </div>
     </div>
   </div>
-  <a ng-href="#/order" class="btn btn-primary btn-lg">Take order</a>
-  <a ng-href="#/group" class="btn btn-default btn-lg">Cancel</a>
+  <a ng-href="#/order" class="btn btn-primary ">Take order</a>
+  <a ng-href="#/group" class="btn btn-default ">Cancel</a>
 </div>
