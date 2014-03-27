@@ -5,35 +5,33 @@
   <h3 class="text-muted"><a ng-href="#/">roundzero</a></h3>
 </div>
 
-<div class="jumbotron">
+<div>
   <h1>Add group</h1>
   <p class="lead">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   </p>
 </div>
 
-<div class="row marketing">
+<div class="row">
   <div class="well">
-      <input type="email" class="form-control input-lg" placeholder="Group name">
+    <input type="text" class="form-control" placeholder="Group name">
   </div>
 
   <div class="well">
-    <div class="input-group input-group-lg">
-      <input type="email" class="form-control" placeholder="Add person">
-      <a ng-href="#/add-group" class="input-group-addon"><span class="glyphicon glyphicon-plus"></span></a>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Add person" ng-model="formNewPerson">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="addPerson(formNewPerson)">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </span>
     </div>
   </div>
-  <div class="well">
-    <div class="row">
-      <div ng-repeat="t in [1,2,3]" class="col-sm-6 col-md-4">
-        <div class="thumbnail">
-          <img src="http://lorempixel.com/300/200/cats/{{t}}">
-          <div class="caption">
-            <p><strong>Username</strong></p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="list-group">
+    <a href="#/round" class="list-group-item clearfix" ng-repeat="person in newPeople">
+      <img style="float:left; margin-right:20px;"src="http://lorempixel.com/50/50/cats/{{person.id}}">
+      <h4 class="list-group-item-heading">{{person.name}}</h4>
+    </a>
   </div>
-  <a ng-href="#/group" class="btn btn-default btn-lg">Done</a>
+  <button type="button" ng-href="#/group" class="btn btn-default ">Done</a>
 </div>
