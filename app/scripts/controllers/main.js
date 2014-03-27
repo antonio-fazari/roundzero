@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('roundzeroApp')
-  .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('MainCtrl', function ($scope, AuthService) {
+    $scope.$watch(AuthService.isLoggedIn, function (isLoggedIn) {
+      $scope.isLoggedIn = isLoggedIn;
+      $scope.currentUser = AuthService.currentUser();
+    });
   });
