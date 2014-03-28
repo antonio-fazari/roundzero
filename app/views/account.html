@@ -15,19 +15,27 @@
 <div class="row marketing">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a href="#/group/add" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-plus"></span></a>
-      <a href="#/group/add" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-pencil"></span></a>
+      <a href="#/group/add" class="btn btn-default btn-sm pull-right">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+      <a href="#/group/add" class="btn btn-default btn-sm pull-right">
+        <span class="glyphicon glyphicon-pencil"></span>
+      </a>
       <h3>Groups</h3>
     </div>
     <div class="panel-body">
       <ul class="list-group">
-        <li class="list-group-item clearfix"><a ng-href="#/group/1">Group name</a></li>
+        <li class="list-group-item clearfix" ng-repeat="group in groups">
+          <a ng-href="#/group/{{group.group.id}}">{{group.group.name}}</a>
+        </li>
       </ul>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <button type="button" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
+      <button type="button" class="btn btn-default btn-sm pull-right">
+        <span class="glyphicon glyphicon-pencil"></span>
+      </button>
       <h3>Details</h3>
     </div>
     <div class="panel-body">

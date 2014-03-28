@@ -1,0 +1,28 @@
+[
+  {
+    "group": {
+      "id": 1,
+      "created": "-0001-11-30T00:00:00+0000",
+      "changed": "2014-03-21T19:27:47+0000",
+      "name": "Group number one"
+    },
+    "stats": {
+      "made": 0,
+      "received": 1,
+      "balance": -1
+    }
+  },
+  {
+    "group": {
+      "id": 2,
+      "created": "2014-03-21T17:34:16+0000",
+      "changed": "-0001-11-30T00:00:00+0000",
+      "name": "Group number two"
+    },
+    "stats": {
+      "made": 3,
+      "received": 2,
+      "balance": 1
+    }
+  }
+]
