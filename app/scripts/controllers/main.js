@@ -13,11 +13,13 @@ angular.module('roundzeroApp')
     $scope.newPeople = [];
     var id = 1;
     $scope.addPerson = function (formNewPerson) {
-      $scope.newPeople.push({
-        name: formNewPerson,
-        id: id
-      });
-      id++;
+      if (formNewPerson) {
+        $scope.newPeople.push({
+          name: formNewPerson,
+          id: id
+        });
+        id++;
+      }
     };
 
   });
