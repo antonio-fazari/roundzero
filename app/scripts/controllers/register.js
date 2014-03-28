@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('RegisterCtrl', function ($scope, $rootScope, $resource) {
-        var User = $resource('http://api.roundzeroapp.com/v1/users/:id', {id:'@id'});
+    .controller('RegisterCtrl', ['$scope', '$rootScope', '$location', 'UserService',
+        function ($scope, $rootScope, $location, UserService) {
 
-        $rootScope.user = new User();
-        $scope.user = $rootScope.user;
+            $rootScope.user = new UserService();
+            $scope.user = $rootScope.user;
 
-        $scope.register = function () {
-            $scope.user.$save();
-        };
-    });
+            $scope.register = function () {
+                $scope.user.$save();
+                $location.path('/account');
+            };
+        }
+    ]);
