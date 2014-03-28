@@ -14,15 +14,15 @@ angular.module('roundzeroApp', [
       })
       .when('/sign-in', {
         templateUrl: 'views/sign-in.html',
-        controller: 'MainCtrl'
+        controller: 'SignInCtrl'
       })
       .when('/register', {
         templateUrl: 'views/register.html',
-        controller: 'MainCtrl'
+        controller: 'RegisterCtrl'
       })
       .when('/account', {
         templateUrl: 'views/account.html',
-        controller: 'MainCtrl'
+        controller: 'AccountCtrl'
       })
       .when('/add-group', {
         templateUrl: 'views/add-group.html',

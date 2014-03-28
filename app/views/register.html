@@ -13,18 +13,18 @@
   <div class="well">
     <form role="form">
       <div class="form-group">
-        <input type="text" class="form-control input-lg" placeholder="Username">
+        <input name="name" type="text" class="form-control input-lg" placeholder="Username" ng-model="user.name">
       </div>
       <div class="form-group">
-        <input type="email" class="form-control input-lg" placeholder="Email">
+        <input name="email" type="email" class="form-control input-lg" placeholder="Email" ng-model="user.email">
       </div>
       <div class="form-group">
-        <input type="password" class="form-control input-lg" placeholder="Password">
+        <input name="password" type="password" class="form-control input-lg" placeholder="Password" ng-model="user.password">
       </div>
       <div class="form-group">
-        <input type="password" class="form-control input-lg" placeholder="Confirm password">
+        <input name="passwordConf" type="password" class="form-control input-lg" placeholder="Confirm password" ng-model="user.passwordConf">
       </div>
-      <a ng-href="#/account" class="btn btn-primary btn-lg">Register</a>
+      <button ng-href="#/account" class="btn btn-primary btn-lg" ng-click="register()">Register</button>
     </form>
   </div>
 </div>

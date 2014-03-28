@@ -21,7 +21,7 @@
     </div>
     <div class="panel-body">
       <ul class="list-group">
-        <li class="list-group-item clearfix"><a ng-href="#/group">Group name</a></li>
+        <li ng-repeat="membership in $root.user.memberships" class="list-group-item clearfix"><a ng-href="#/group/{{membership.group.id}}">{{membership.group.name}}</a></li>
       </ul>
     </div>
 
@@ -31,9 +31,9 @@
     </div>
     <div class="panel-body">
       <label>Username</label>
-      <p>Fred</p>
+      <p>{{$root.user.name}}</p>
       <label>Email</label>
-      <p>test@example.com</p>
+      <p>{{$root.user.email}}</p>
     </div>
 
     <div class="panel-heading">

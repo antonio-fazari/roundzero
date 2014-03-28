@@ -3,11 +3,11 @@ namespace RoundZero;
 
 class TokenAuth extends \Slim\Middleware
 {
-    protected $entityManager;
+    protected $tokenService;
 
-    public function __construct($entityManager)
+    public function __construct($tokenService)
     {
-        $this->entityManager = $entityManager;
+        $this->tokenService = $tokenService;
     }
 
     public function call()
@@ -16,9 +16,8 @@ class TokenAuth extends \Slim\Middleware
         $env = $this->app->environment();
 
         if ($tokenId) {
-            $token = $this->entityManager->getRepository('RoundZero\Entity\Token')->find($tokenId);
-            if ($token) {
-                $this->app->user = $token->getUser();
+            if ($token = $this->tokenService->findById($tokenId)) {
+                $this->app->user = $token->user;
 
             } else {
                 $this->app->response->setStatus(403);
@@ -28,7 +27,7 @@ class TokenAuth extends \Slim\Middleware
                 return;
             }
         // Todo: ensure /v1/users is POST.
-        } elseif ($env['PATH_INFO'] != '/v1/authorize' &&  $env['PATH_INFO'] != '/v1/users') {
+        } elseif ($env['PATH_INFO'] != '/v1/tokens/authenticate' &&  $env['PATH_INFO'] != '/v1/users') {
             $this->app->response->setStatus(403);
             echo json_encode(array(
                 'error' => "Authentication required",

@@ -1,59 +1,113 @@
 <?php
 namespace RoundZero\Service;
 
-use Doctrine\ORM\EntityManager;
-use RoundZero\Entity\Group as GroupEntity;
-use RoundZero\Entity\User as UserEntity;
-
 class User
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
+    protected $db;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(\PDO $db)
     {
-        $this->entityManager = $entityManager;
+        $this->db = $db;
     }
 
-    public function getTotalReceivedFromGroup(UserEntity $user, GroupEntity $group)
+    public function findAll()
     {
-        $query = $this->entityManager->createQuery(
-            'SELECT COUNT(u.id) 
-            FROM RoundZero\Entity\Round r 
-            JOIN r.recipients u
-            WHERE u = :user
-            AND r.group = :group'
-        );
-        $query->setParameter('user', $user);
-        $query->setParameter('group', $group);
-        return $query->getSingleScalarResult();
+        $sql = 'SELECT id, created, changed, name, email FROM users';
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
     }
 
-    public function getTotalMadeForGroup(UserEntity $user, GroupEntity $group)
+    public function findByLogin($email, $password)
     {
-        $query = $this->entityManager->createQuery(
-            'SELECT COUNT(u.id) 
-            FROM RoundZero\Entity\Round r 
-            JOIN r.recipients u
-            WHERE r.creator = :creator
-            AND r.group = :group'
-        );
-        $query->setParameter('creator', $user);
-        $query->setParameter('group', $group);
-        return $query->getSingleScalarResult();
+        $sql = 'SELECT id, password, salt FROM users WHERE email  = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array($email));
+        $user = $stmt->fetch();
+
+        if ($user && crypt($password, $user->salt) == $user->password) {
+            return $this->findById($user->id);
+        }
     }
 
-    public function getStats(UserEntity $user, GroupEntity $group)
+    public function findByEmail($email)
     {
-        $made = $this->getTotalMadeForGroup($user, $group);
-        $received = $this->getTotalReceivedFromGroup($user, $group);
+        $sql = 'SELECT id, created, changed, name, email FROM users WHERE email  = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array($email));
+        $user = $stmt->fetch();
 
-        return array(
-            'made' => $made,
-            'received' => $received,
-            'balance' => $made - $received,
-        );
+        return $user;
+    }
+
+    public function findById($id, $detailed = false)
+    {
+        $sql = 'SELECT id, created, changed, name, email FROM users WHERE id  = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array($id));
+        $user = $stmt->fetch();
+
+        if ($detailed) {
+            $membershipService = new Membership($this->db);
+            $user->memberships = $membershipService->findAllForUser($user->id);
+        }
+
+        return $user;
+    }
+
+    public function insert($user)
+    {
+        $this->hashPassword($user);
+
+        $sql = 'INSERT INTO users
+            SET created = NOW(), changed = NOW(), name = ?, email = ?, salt = ?, password = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array(
+            $user->name,
+            $user->email,
+            $user->salt,
+            $user->password,
+        ));
+        return $this->db->lastInsertId();
+    }
+
+    public function update($user)
+    {
+        if ($user->password) {
+            $this->updatePassword($user);
+        }
+        $sql = 'UPDATE users SET changed = NOW(), name = ?, email = ? WHERE id = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array(
+            $user->name,
+            $user->email,
+            $user->id,
+        ));
+        return $stmt->rowCount();
+    }
+
+
+    public function updatePassword($user)
+    {
+        $this->hashPassword($user);
+        $sql = 'UPDATE users SET salt = ?, password = ? WHERE id = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array(
+            $user->salt,
+            $user->password,
+        ));
+    }
+
+    public function delete($id)
+    {
+        $sql = 'DELETE FROM users WHERE id = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(array($id));
+        return $stmt->rowCount();
+    }
+
+    public function hashPassword($user)
+    {
+        $user->salt = uniqid(mt_rand(), true);
+        $user->password = crypt($user->password, $user->salt);
     }
 }
