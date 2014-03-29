@@ -1,22 +1,24 @@
-<div class="header">
-  <ul class="nav nav-pills pull-right">
-    <li><a href="#/account">Account</a></li>
+<div class="btn-group">
+  <button type="button" class="btn btn-default">Group name one</button>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="#">Group name one</a></li>
+    <li><a href="#">Group name two</a></li>
+    <li class="divider"></li>
+    <li><a href="#">Add group</a></li>
   </ul>
-  <h3 class="text-muted"><a ng-href="#/">roundzero</a></h3>
 </div>
 
-<div>
-  <h1>Group page</h1>
-  <p class="lead">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  </p>
-</div>
+<h1>Group page</h1>
+<p class="lead">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+</p>
+
 
 <div class="row marketing">
-  <div class="row clearfix" style="margin-bottom: 20px;">
-    <a ng-href="#/group/add" class="btn btn-default btn-sm pull-right"><span class="glyphicon glyphicon-edit"></span> Edit group</a>
-  </div>
-
   <div class="row">
     <div class="list-group">
       <a href="#/round" class="list-group-item clearfix" ng-repeat="person in testPeople">
