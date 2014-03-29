@@ -1,6 +1,7 @@
 vendor
 composer.lock
 composer.phar
+api/config.php
 
 node_modules
 dist

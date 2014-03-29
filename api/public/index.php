@@ -1,10 +1,17 @@
 <?php
 require_once __DIR__ . "/../vendor/autoload.php";
+$config = require __DIR__ . "/../config.php";
 
 $entityManager = null;
 use RoundZero\TokenAuth;
 
-$db = new PDO('mysql:host=localhost;dbname=tea;charset=utf8', 'root', '');
+$db = new PDO(
+    'mysql:host=' . $config['db']['host'] . ';' .
+    'dbname=' . $config['db']['name'] . ';' .
+    'charset=utf8',
+    $config['db']['username'],
+    $config['db']['password']
+);
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
