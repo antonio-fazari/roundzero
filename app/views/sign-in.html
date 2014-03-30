@@ -20,10 +20,10 @@
                         required
                         type="email">
                 <p class="help-block error" ng-show="form.email.$error.required && submitted">
-                    please enter your email
+                    Required
                 </p>
                 <p class="help-block error" ng-show="form.email.$error.email && submitted">
-                    please enter a valid email
+                    Not a valid email address
                 </p>
             </div>
             <div class="form-group" ng-class="{'has-error': form.password.$invalid && submitted}">
@@ -36,7 +36,7 @@
                         required
                         type="password">
                 <p class="help-block error" ng-show="form.password.$invalid && submitted">
-                    please enter your password
+                    Required
                 </p>
             </div>
             <button class="btn btn-primary btn-lg ladda-button"
@@ -62,7 +62,7 @@
                         required
                         ng-model="user.name">
                 <p class="help-block error" ng-show="form.name.$error.required && submitted">
-                    please enter your name
+                    Required
                 </p>
             </div>
             <div class="form-group" ng-class="{'has-error': form.email.$invalid && submitted}">
@@ -75,10 +75,10 @@
                         required
                         type="email">
                 <p class="help-block error" ng-show="form.email.$error.required && submitted">
-                    please enter your email
+                    Required
                 </p>
                 <p class="help-block error" ng-show="form.email.$error.email && submitted">
-                    please enter a valid email
+                    Not a valid email address
                 </p>
             </div>
             <div class="form-group" ng-class="{'has-error': form.password.$invalid && submitted}">
@@ -91,7 +91,7 @@
                         required
                         type="password">
                 <p class="help-block error" ng-show="form.password.$invalid && submitted">
-                    please enter your password
+                    Required
                 </p>
             </div>
             <div class="form-group" ng-class="{'has-error': form.passwordConf.$invalid && submitted}">
@@ -105,10 +105,10 @@
                         required
                         type="password">
                 <p class="help-block error" ng-show="form.passwordConf.$error.required && submitted">
-                    please confirm your password
+                    Required
                 </p>
                 <p class="help-block error" ng-show="user.passwordConf && form.passwordConf.$error.unique && submitted">
-                    passwords do not match
+                    Passwords do not match
                 </p>
             </div>
             <button class="btn btn-primary btn-lg ladda-button"
