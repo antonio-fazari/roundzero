@@ -110,3 +110,6 @@ body {
 .bg-highlight {
   background-color: #dff0d8;
 }
+
+// Fix for empty href attributes.
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

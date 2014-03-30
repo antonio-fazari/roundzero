@@ -4,7 +4,8 @@ angular.module('roundzeroApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute'
+    'ngRoute',
+    'ui.bootstrap'
 ])
 .config(function ($routeProvider) {
     $routeProvider
@@ -53,7 +54,3 @@ angular.module('roundzeroApp', [
         }
     });
 });
-
-
-
-
