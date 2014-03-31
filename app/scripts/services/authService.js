@@ -1,26 +1,28 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .service('AuthService', ['$cookieStore', 'TokenHandler',
-        function($cookieStore, TokenHandler) {
-            var token = $cookieStore.get('token') || null;
+    .service('AuthService', ['storage', 'TokenHandler',
+        function(storage, TokenHandler) {
+            var token = storage.get('token') || null;
 
             this.loggedIn = false;
             this.userId = null;
 
-            this.login = function (token) {
+            this.login = function (token, remember) {
                 this.loggedIn = true;
                 this.userId = token.userId;
                 TokenHandler.set(token.id);
 
-                $cookieStore.put('token', token);
+                if (remember) {
+                    storage.set('token', token);
+                }
             };
             this.logout = function () {
                 this.loggedIn = false;
                 this.userId = null;
                 TokenHandler.set(null);
 
-                $cookieStore.remove('token');
+                storage.remove('token');
             };
 
             if (token) {

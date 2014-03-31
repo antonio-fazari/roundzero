@@ -5,7 +5,8 @@ angular.module('roundzeroApp', [
     'ngResource',
     'ngSanitize',
     'ngRoute',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'angularLocalStorage'
 ])
 .config(function ($routeProvider) {
     $routeProvider

@@ -5,7 +5,8 @@ angular.module('roundzeroApp')
         function ($scope, $http, $location, AuthService) {
             $scope.login = {
                 email: '',
-                password: ''
+                password: '',
+                remember: true
             };
             $scope.submitted = false;
             $scope.loading = false;
@@ -25,7 +26,7 @@ angular.module('roundzeroApp')
                         $scope.loading = false;
                         $scope.error = null;
 
-                        AuthService.login(response);
+                        AuthService.login(response, $scope.login.remember);
 
                         $location.path('/account');
                     })
