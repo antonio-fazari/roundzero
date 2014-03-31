@@ -1,11 +1,21 @@
 <?php
 namespace RoundZero;
 
+use RoundZero\Service\Token;
+
 class TokenAuth extends \Slim\Middleware
 {
+    /**
+     * @var Token
+     */
     protected $tokenService;
 
-    public function __construct($tokenService)
+    /**
+     * Public constructor
+     * 
+     * @param Token $tokenService
+     */
+    public function __construct(Token $tokenService)
     {
         $this->tokenService = $tokenService;
     }
@@ -13,9 +23,9 @@ class TokenAuth extends \Slim\Middleware
     public function call()
     {
         $tokenId = $this->app->request->params('token');
-        $env = $this->app->environment();
 
         if ($tokenId) {
+            // Token supplied - check validity.
             if ($token = $this->tokenService->findById($tokenId)) {
                 $this->app->user = $token->user;
 
@@ -26,8 +36,7 @@ class TokenAuth extends \Slim\Middleware
                 ));
                 return;
             }
-        // Todo: ensure /v1/users is POST.
-        } elseif ($env['PATH_INFO'] != '/v1/tokens/authenticate' &&  $env['PATH_INFO'] != '/v1/users') {
+        } elseif ($this->requiresAuth()) {
             $this->app->response->setStatus(403);
             echo json_encode(array(
                 'error' => "Authentication required",
@@ -36,5 +45,22 @@ class TokenAuth extends \Slim\Middleware
         }
 
         $this->next->call();
+    }
+
+    /**
+     * Determine whether current request requires token authentication.
+     * 
+     * @return bool
+     */
+    protected function requiresAuth()
+    {
+        $env = $this->app->environment();
+
+        if ($env['REQUEST_METHOD'] == 'OPTIONS'
+                || $env['PATH_INFO'] == '/v1/tokens/authenticate'
+                || ($env['PATH_INFO'] == '/v1/users' && $env['REQUEST_METHOD'] == 'POST')) {
+            return false;
+        }
+        return true;
     }
 }
