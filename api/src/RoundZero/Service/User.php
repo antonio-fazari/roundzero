@@ -72,7 +72,7 @@ class User
 
     public function update($user)
     {
-        if ($user->password) {
+        if (!empty($user->password)) {
             $this->updatePassword($user);
         }
         $sql = 'UPDATE users SET changed = NOW(), name = ?, email = ? WHERE id = ?';
