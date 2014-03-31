@@ -94,6 +94,7 @@ class User
         $stmt->execute(array(
             $user->salt,
             $user->password,
+            $user->id,
         ));
     }
 
