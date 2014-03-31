@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('SignInCtrl', ['$scope', '$rootScope', '$http', '$location',
-        function ($scope, $rootScope, $http, $location) {
+    .controller('SignInCtrl', ['$scope', '$http', '$location', 'AuthService',
+        function ($scope, $http, $location, AuthService) {
             $scope.login = {
                 email: '',
                 password: ''
@@ -25,8 +25,8 @@ angular.module('roundzeroApp')
                         $scope.loading = false;
                         $scope.error = null;
 
-                        $rootScope.token = response.id;
-                        $rootScope.user = response.user;
+                        AuthService.login(response);
+
                         $location.path('/account');
                     })
                     .error(function(response) {

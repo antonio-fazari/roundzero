@@ -1,28 +1,27 @@
-<h1>Add group</h1>
+<h1 class="page-header">Add group</h1>
 <p class="lead">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 </p>
 
-<div class="row marketing">
-  <div class="well">
-    <input type="text" class="form-control" placeholder="Group name">
-  </div>
-
-  <div class="well">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Add person" ng-model="formNewPerson">
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" ng-click="addPerson(formNewPerson)">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
-      </span>
+<alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
+<form name="form" role="form" ng-submit="submit()" novalidate>
+    <div class="form-group" ng-class="{'has-error': form.name.$invalid && submitted}">
+        <label class="sr-only" for="group-name">Name</label>
+        <input id="group-name"
+                name="name"
+                type="text"
+                class="form-control input-lg"
+                placeholder="Name"
+                required
+                ng-model="group.name">
+        <p class="help-block error" ng-show="form.name.$error.required && submitted">
+            Required
+        </p>
     </div>
-  </div>
-  <div class="list-group">
-    <div class="list-group-item clearfix" ng-repeat="person in newPeople">
-      <img style="float:left; margin-right:20px;"src="http://lorempixel.com/50/50/cats/{{person.id}}">
-      <h4 class="list-group-item-heading">{{person.name}}</h4>
-    </div>
-  </div>
-  <button type="button" ng-href="#/group" class="btn btn-default ">Done</a>
-</div>
+    <button class="btn btn-primary btn-lg ladda-button"
+            data-style="expand-left"
+            type="submit"
+            ui-ladda="loading">
+        <span class="ladda-label">Add group</span>
+    </button>
+</form>

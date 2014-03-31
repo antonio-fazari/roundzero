@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('AccountCtrl', ['$scope', '$rootScope',
-        function ($scope, $rootScope) {
-            $scope.user = $rootScope.user;
+    .controller('AccountCtrl', ['$scope', 'AuthService', 'UserService',
+        function ($scope, AuthService, UserService) {
+            $scope.user = UserService.get({id: 1});
         }
     ]);
