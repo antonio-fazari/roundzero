@@ -17,8 +17,7 @@ angular.module('roundzeroApp', [
             templateUrl: 'views/sign-in.html'
         })
         .when('/account', {
-            templateUrl: 'views/account.html',
-            controller: 'AccountCtrl'
+            templateUrl: 'views/account.html'
         })
         .when('/groups', {
             templateUrl: 'views/group.html',

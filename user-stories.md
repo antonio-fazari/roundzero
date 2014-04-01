@@ -1,21 +1,21 @@
-As a new user
-I want to register
-So that I can use the app
+    As a new user
+    I want to register
+    So that I can use the app
 
-As an existing user
-I want to log in
-So that I can access my account
+    As an existing user
+    I want to log in
+    So that I can access my account
 
 As a logged in user
 I want to edit my account details
 So that I can keep them up to date
 
-As a logged in user
-I want to log out
-So that I can remove my account from the app
+    As a logged in user
+    I want to log out
+    So that I can remove my account from the app
 
-As a logged in user
-I want to create a new group
+    As a logged in user
+    I want to create a new group
 
 As a logged in user
 I want to join an existing group
