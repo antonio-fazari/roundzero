@@ -30,7 +30,7 @@ angular.module('roundzeroApp', [
         })
         .when('/group/:groupId', {
             templateUrl: 'views/group.html',
-            controller: 'MainCtrl'
+            controller: 'GroupCtrl'
         })
         .when('/round', {
             templateUrl: 'views/round.html',

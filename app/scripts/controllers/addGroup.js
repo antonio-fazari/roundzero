@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('AddGroupCtrl', ['$scope', '$rootScope', '$location', 'GroupService',
-        function ($scope, $rootScope, $location, GroupService) {
+    .controller('AddGroupCtrl', ['$scope', '$http', '$location', 'AuthService', 'GroupService', 'MembershipService',
+        function ($scope, $http, $location, AuthService, GroupService, MembershipService) {
             $scope.submitted = false;
             $scope.loading = false;
             $scope.error = null;
@@ -22,6 +22,24 @@ angular.module('roundzeroApp')
                         function success() {
                             $scope.loading = false;
                             $scope.error = null;
+                            // // Add member that created the group.
+                            // var member = {
+                            //     groupId: 2,
+                            //     userId: AuthService.userId
+                            // }
+                            // $http.post('http://api.roundzeroapp.com/v1/memberships', member)
+                            //     .success(function(response) {
+                            //         $location.path('/account');
+                            //     })
+                            //     .error(function(response) {
+                            //         $scope.loading = false;
+
+                            //         if (response.error) {
+                            //             $scope.error = response.error;
+                            //         } else {
+                            //             $scope.error = 'There was an error logging in. Please try later.';
+                            //         }
+                            //     });
 
                             $location.path('/account');
                         },

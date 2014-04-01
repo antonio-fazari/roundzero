@@ -8,23 +8,18 @@
     <li><a href="#">Group name one</a></li>
     <li><a href="#">Group name two</a></li>
     <li class="divider"></li>
-    <li><a href="#">Add group</a></li>
+    <li><a href="#/group/add">Add group</a></li>
   </ul>
 </div>
 
-<h1>Group page</h1>
-<p class="lead">
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-</p>
-
+<h1>{{group.name}}</h1>
 
 <div class="row marketing">
   <div class="row">
     <div class="list-group">
-      <a href="#/round" class="list-group-item clearfix" ng-repeat="person in testPeople">
-        <span class="badge" ng-class="{'bg-success': person.val > 0, 'bg-danger': person.val < 0}"><span class="glyphicon glyphicon-glass"></span> {{person.val}}</span>
-        <img style="float:left; margin-right:20px;"src="http://lorempixel.com/105/105/cats/{{person.id}}">
-        <h4 class="list-group-item-heading">{{person.name}}</h4>
+      <a href="#/round" class="list-group-item clearfix">
+        <img style="float:left; margin-right:20px;"src="">
+        <h4 class="list-group-item-heading">Blah</h4>
       </a>
     </div>
   </div>
