@@ -41,7 +41,7 @@ class Membership
         $stmt->execute(array($id));
         $results = $stmt->fetchAll();
 
-        $groupService = new User($this->db);
+        $groupService = new Group($this->db);
 
         foreach ($results as $i => $result) {
             $results[$i]->group = $groupService->findById($result->groupId);
