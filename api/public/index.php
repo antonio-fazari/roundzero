@@ -152,6 +152,7 @@ $app->delete('/v1/users/:id', function ($id) use ($userService, $app) {
     }
 });
 
+
 $app->get('/v1/users/:id/rounds', function ($id) use ($entityManager, $app) {
     if ($user = $entityManager->getRepository('RoundZero\Entity\User')->find($id)) {
         $results = array();
@@ -165,6 +166,19 @@ $app->get('/v1/users/:id/rounds', function ($id) use ($entityManager, $app) {
         echo json_encode(array(
             'error' => "User $id not found",
         ));
+    }
+});
+
+$app->options('/v1/users/email/:email', function () use ($app) {
+    $app->response->setStatus('Allow', 'GET');
+});
+
+$app->get('/v1/users/email/:email', function ($email) use ($userService, $app) {
+    if ($user = $userService->findByEmail($email)) {
+        echo json_encode($user);
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array('error' => "User $id not found"));
     }
 });
 
