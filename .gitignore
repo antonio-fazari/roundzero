@@ -1,9 +1,11 @@
 vendor
 composer.lock
 composer.phar
+api/config.php
 
 node_modules
 dist
+.DS_Store
 .tmp
 .sass-cache
 app/bower_components

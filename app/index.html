@@ -6,13 +6,15 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>Round Zero</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/ladda-bootstrap/dist/ladda-themeless.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -23,6 +25,18 @@
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="HeaderCtrl">
+        <div class="container">
+            <div class="navbar-header">
+                <div class="navbar-brand"><a href="/">roundzero</a></div>
+            </div>
+            <ul ng-show="AuthService.loggedIn" class="nav navbar-nav navbar-right">
+                <li><a href="#/account">Account</a></li>
+                <li><a ng-click="logout()">Sign out</a></li>
+            </ul>
+        </div>
+    </nav>
 
     <!-- Add your site or application content here -->
     <div class="container" ng-view=""></div>
@@ -52,12 +66,35 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angularLocalStorage/src/angularLocalStorage.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/ladda-bootstrap/dist/ladda.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/tokenHandler.js"></script>
+    <script src="scripts/services/authService.js"></script>
+    <script src="scripts/services/groupService.js"></script>
+    <script src="scripts/services/orderService.js"></script>
+    <script src="scripts/services/roundService.js"></script>
+    <script src="scripts/services/tokenService.js"></script>
+    <script src="scripts/services/userService.js"></script>
+    <script src="scripts/services/membershipService.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/header.js"></script>
+    <script src="scripts/controllers/register.js"></script>
+    <script src="scripts/controllers/accountDetails.js"></script>
+    <script src="scripts/controllers/accountPassword.js"></script>
+    <script src="scripts/controllers/signIn.js"></script>
+    <script src="scripts/controllers/addMembership.js"></script>
+    <script src="scripts/controllers/addGroup.js"></script>
+    <script src="scripts/controllers/group.js"></script>
+    <script src="scripts/directives/ladda.js"></script>
+    <script src="scripts/directives/password-match.js"></script>
+    <!-- endbuild -->
 </body>
 </html>
