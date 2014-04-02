@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('AddGroupCtrl', ['$scope', '$http', '$location', 'storage', 'AuthService', 'GroupService', 'MembershipService',
-        function ($scope, $http, $location, storage, AuthService, GroupService, MembershipService) {
+    .controller('AddGroupCtrl', ['$scope', '$location', 'AuthService', 'GroupService', 'MembershipService',
+        function ($scope, $location, AuthService, GroupService, MembershipService) {
             $scope.submitted = false;
             $scope.loading = false;
             $scope.error = null;
@@ -29,7 +29,7 @@ angular.module('roundzeroApp')
 
                             membership.$save(
                                 function success(response) {
-                                    $location.path('/account');
+                                    $location.path('/group/' + membership.groupId);
                                 },
                                 function error(response) {
                                     $scope.loading = false;
@@ -41,8 +41,6 @@ angular.module('roundzeroApp')
                                     }
                                 }
                             );
-
-                            $location.path('/account');
                         },
                         function error(response) {
                             $scope.loading = false;
