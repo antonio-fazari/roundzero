@@ -1,12 +1,15 @@
 <div class="btn-group">
-  <button type="button" class="btn btn-default">Group name one</button>
+  <button type="button" class="btn btn-default">{{group.name}}</button>
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     <span class="caret"></span>
     <span class="sr-only">Toggle Dropdown</span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="#">Group name one</a></li>
-    <li><a href="#">Group name two</a></li>
+    <li ng-repeat="membership in user.memberships">
+      <a href="#/group/{{membership.group.id}}">
+        {{membership.group.name}}
+      </a>
+    </li>
     <li class="divider"></li>
     <li><a href="#/group/add">Add group</a></li>
   </ul>
@@ -14,12 +17,38 @@
 
 <h1>{{group.name}}</h1>
 
+<alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
+<form name="form" role="form" ng-controller="AddMembershipCtrl"
+      ng-submit="submit()" novalidate>
+    <div class="form-group" ng-class="{'has-error': form.name.$invalid && submitted}">
+        <label class="sr-only" for="group-name">Name</label>
+        <input id="group-name"
+                name="name"
+                type="text"
+                class="form-control input-lg"
+                placeholder="Name"
+                required
+                ng-model="membership.name">
+        <p class="help-block error" ng-show="form.name.$error.required && submitted">
+            Required
+        </p>
+    </div>
+    <button class="btn btn-primary btn-lg ladda-button"
+            data-style="expand-left"
+            type="submit"
+            ui-ladda="loading">
+        <span class="ladda-label">Add member</span>
+    </button>
+</form>
+
 <div class="row marketing">
   <div class="row">
     <div class="list-group">
-      <a href="#/round" class="list-group-item clearfix">
-        <img style="float:left; margin-right:20px;"src="">
-        <h4 class="list-group-item-heading">Blah</h4>
+      <a href="#/round" class="list-group-item clearfix"
+        ng-repeat="membership in group.memberships">
+        <h4 class="list-group-item-heading">
+          {{membership.user.name}}
+        </h4>
       </a>
     </div>
   </div>
