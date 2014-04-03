@@ -111,5 +111,11 @@ body {
   background-color: #dff0d8;
 }
 
+// Autocomplete.
+.ui-autocomplete {
+  @extend .dropdown-menu;
+  max-height: 200px !important;
+}
+
 // Fix for empty href attributes.
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
