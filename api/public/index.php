@@ -92,6 +92,10 @@ $app->get('/v1/users', function () use ($userService, $app) {
     echo json_encode($userService->findAll());
 });
 
+$app->get('/v1/users/suggestions/:partial', function ($partial) use ($userService, $app) {
+    echo json_encode($userService->findSuggestions($partial));
+});
+
 $app->post('/v1/users', function () use ($userService, $app) {
     $user = json_decode($app->request->getBody());
     $id = $userService->insert($user);

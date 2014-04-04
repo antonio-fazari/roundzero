@@ -17,6 +17,15 @@ class User
         return $stmt->fetchAll();
     }
 
+    public function findSuggestions($partial)
+    {
+        $sql = "SELECT id, created, changed, name, email FROM users
+                WHERE name LIKE CONCAT('%', ?, '%')";
+        $stmt = $this->db->query($sql);
+        $stmt->execute(array($partial));
+        return $stmt->fetchAll();
+    }
+
     public function findByLogin($email, $password)
     {
         $sql = 'SELECT id, password, salt FROM users WHERE email  = ?';
