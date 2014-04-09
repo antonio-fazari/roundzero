@@ -16,7 +16,7 @@
 </div>
 
 <h1>{{group.name}}</h1>
-<autocomplete attr-input-class="form-control input-lg" ng-model="yourchoice" data="userNames"></autocomplete>
+
 <alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
 <form name="form" role="form" ng-controller="AddMembershipCtrl"
       ng-submit="submit()" novalidate>
@@ -28,7 +28,6 @@
                 class="form-control input-lg"
                 placeholder="Name"
                 required
-                ui-autocomplete="autocomplete"
                 ng-model="membership.name">
         <p class="help-block error" ng-show="form.name.$error.required && submitted">
             Required
