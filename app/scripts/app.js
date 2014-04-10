@@ -6,7 +6,8 @@ angular.module('roundzeroApp', [
     'ngSanitize',
     'ngRoute',
     'ui.bootstrap',
-    'angularLocalStorage'
+    'angularLocalStorage',
+    'mgcrea.ngStrap'
 ])
 .config(function ($routeProvider) {
     $routeProvider
@@ -55,4 +56,3 @@ angular.module('roundzeroApp', [
             }
         });
     }]);
-
