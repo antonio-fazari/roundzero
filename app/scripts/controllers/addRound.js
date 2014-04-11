@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('AddRoundCtrl', ['$scope', '$routeParams', '$location', 'GroupService', 'RoundService', 'OrderService', 'AuthService',
-        function ($scope, $routeParams, $location, GroupService, RoundService, OrderService, AuthService) {
+    .controller('AddRoundCtrl', ['$scope', '$routeParams', '$location', '$q', 'GroupService', 'RoundService', 'OrderService', 'AuthService',
+        function ($scope, $routeParams, $location, $q, GroupService, RoundService, OrderService, AuthService) {
             $scope.submitted = false;
             $scope.loading = false;
             $scope.error = null;
@@ -41,19 +41,25 @@ angular.module('roundzeroApp')
 
                     $scope.round.$save(
                         function success(response) {
-                            $scope.loading = false;
-                            $scope.error = null;
-                            $scope.submitted = false;
+                            var promises = [];
 
-                            $($scope.orders).each(function (i, item) {
+                            angular.forEach($scope.orders, function (item) {
                                 if (item.active) {
                                     var order = new OrderService(item);
                                     order.roundId = response.id;
                                     order.userId = item.user.id;
-                                    order.$save();
+
+                                    promises.push(order.$save());
                                 }
                             });
-                            $location.path('/group/' + $routeParams.groupId);
+
+                            $q.all(promises).then(function () {
+                                $scope.loading = false;
+                                $scope.error = null;
+                                $scope.submitted = false;
+
+                                $location.path('/group/' + $routeParams.groupId);
+                            });
                         },
                         function error(response) {
                             $scope.loading = false;
