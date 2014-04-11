@@ -52,9 +52,7 @@
   <div class="list-group-item clearfix"
     ng-repeat="membership in group.memberships | orderBy: 'user.name'">
     <button type="button" class="close pull-right" ng-click="removeMembership(membership)">&times;</button>
-    <h4 class="list-group-item-heading pull-left">
-      {{membership.user.name}}
-    </h4>
+    {{membership.user.name}}
   </div>
 </div>
 

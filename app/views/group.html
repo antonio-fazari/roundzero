@@ -23,15 +23,13 @@
 
 <div class="list-group clear">
   <div class="list-group-item clearfix"
-    ng-class="{'list-group-item-success': membership.balance > 1,'list-group-item-warning': membership.balance < 1, 'list-group-item-info': membership.balance == 0}"
+    ng-class="{'list-group-item-success': membership.balance > 0,'list-group-item-warning': membership.balance < 0}"
     ng-repeat="membership in group.memberships | orderBy: 'balance'">
     <span class="badge">{{membership.balance}}</span>
-    <h4 class="list-group-item-heading pull-left">
-      {{membership.user.name}}
-    </h4>
+    {{membership.user.name}}
   </div>
 </div>
 
-<a href="#/group/{{group.id}}/round" class="btn btn-lg btn-success">
+<a href="#/group/{{group.id}}/round" class="btn btn-lg btn-primary">
   <span class="glyphicon glyphicon-plus"></span> Make a round
 </a>
