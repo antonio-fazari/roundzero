@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .factory('RoundService', ['$resource', 'TokenHandler',
-        function($resource, TokenHandler){
+    .factory('RoundService', function($resource, TokenHandler){
             var resource = $resource('http://api.roundzeroapp.com/v1/rounds/:id', {
                 id:'@id'
             });
@@ -11,4 +10,4 @@ angular.module('roundzeroApp')
 
             return resource;
         }
-    ]);
+    );

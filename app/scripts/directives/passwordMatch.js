@@ -2,7 +2,7 @@
 
 // http://rogeralsing.com/2013/08/26/angularjs-directive-to-check-that-passwords-match-followup/
 angular.module('roundzeroApp')
-    .directive('passwordMatch', [function () {
+    .directive('passwordMatch', function () {
         return {
             restrict: 'A',
             scope:true,
@@ -13,7 +13,7 @@ angular.module('roundzeroApp')
                     //get the value of the first password
                     var e1 = scope.$eval(attrs.ngModel);
      
-                    //get the value of the other password  
+                    //get the value of the other password    
                     var e2 = scope.$eval(attrs.passwordMatch);
                     return e1 === e2;
                 };
@@ -25,4 +25,4 @@ angular.module('roundzeroApp')
                 });
             }
         };
-    }]);
+    });

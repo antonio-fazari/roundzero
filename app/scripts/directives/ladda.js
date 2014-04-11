@@ -17,21 +17,21 @@
  *      </button>
  */
 angular.module('roundzeroApp')
-    .directive('uiLadda', [function () {
+    .directive('uiLadda', function () {
         return {
             link: function postLink(scope, element, attrs) {
-                var ladda = Ladda.create(element[0]);
+                var ladda = window.Ladda.create(element[0]);
                 scope.$watch(attrs.uiLadda, function(newVal, oldVal){
                     if (angular.isNumber(oldVal)) {
                         if (angular.isNumber(newVal)) {
                             ladda.setProgress(newVal);
                         } else {
-                            newVal && ladda.setProgress(0) || ladda.stop();
+                            newVal && ladda.setProgress(0) || ladda.stop(); // jshint ignore:line
                         }
                     } else {
-                        newVal && ladda.start() || ladda.stop();
+                        newVal && ladda.start() || ladda.stop(); // jshint ignore:line
                     }
                 });
             }
         };
-    }]);
+    });

@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .service('AuthService', ['storage', 'TokenHandler', 'UserService',
-        function(storage, TokenHandler, UserService) {
+    .service('AuthService', function(storage, TokenHandler, UserService) {
             var token = storage.get('token') || null;
 
             this.loggedIn = false;
@@ -43,4 +42,4 @@ angular.module('roundzeroApp')
                 this.login(token);
             }
         }
-    ]);
+    );

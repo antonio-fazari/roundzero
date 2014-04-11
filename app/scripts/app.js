@@ -18,33 +18,32 @@ angular.module('roundzeroApp', [
             controller: 'MainCtrl'
         })
         .when('/sign-in', {
-            templateUrl: 'views/sign-in.html'
+            templateUrl: 'views/signIn.html'
         })
         .when('/account', {
             templateUrl: 'views/account.html'
         })
         .when('/group/add', {
-            templateUrl: 'views/add-group.html',
-            controller: 'AddGroupCtrl'
+            templateUrl: 'views/groupAdd.html',
+            controller: 'GroupAddCtrl'
         })
         .when('/group/:groupId', {
             templateUrl: 'views/group.html',
             controller: 'GroupCtrl'
         })
         .when('/group/:groupId/members', {
-            templateUrl: 'views/group-members.html',
-            controller: 'GroupMembersCtrl'
+            templateUrl: 'views/memberships.html',
+            controller: 'MembershipsCtrl'
         })
         .when('/group/:groupId/round', {
-            templateUrl: 'views/add-round.html',
-            controller: 'AddRoundCtrl'
+            templateUrl: 'views/roundAdd.html',
+            controller: 'RoundAddCtrl'
         })
         .otherwise({
             redirectTo: '/'
         });
 })
-.run(['$rootScope', '$location', 'AuthService',
-    function($rootScope, $location, AuthService) {
+.run(function($rootScope, $location, AuthService) {
         // register listener to watch route changes
         $rootScope.$on('$routeChangeStart', function(event, next) {
             if (!AuthService.loggedIn) {
@@ -54,4 +53,4 @@ angular.module('roundzeroApp', [
                 }
             }
         });
-    }]);
+    });

@@ -1,0 +1,74 @@
+<div class="page-header clearfix">
+    <div class="dropdown pull-left">
+        <h1 class="dropdown-toggle" data-toggle="dropdown">
+            {{group.name}} <span class="caret"></span>
+        </h1>
+        <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="membership in user.memberships">
+                <a href="#/group/{{membership.group.id}}">
+                    {{membership.group.name}}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#/group/add">
+                <span class="glyphicon glyphicon-plus"></span> Add group
+            </a></li>
+        </ul>
+    </div>
+
+    <ul class="nav nav-pills pull-right">
+        <li><a href="#/group/{{group.id}}/members">
+            <span class="glyphicon glyphicon-user"></span> Edit Members
+        </a></li>
+    </ul>
+</div>
+
+<form name="form" role="form" ng-submit="submit()" novalidate>
+    <div class="form-group">
+            <h3>Whose round is it?</h3>
+            <select id="creator"
+                    name="creator"
+                    class="form-control"
+                    ng-model="round.userId"
+                    ng-options="membership.user.id as membership.user.name for membership in group.memberships | orderBy: 'user.name'">
+            </select>
+    </div>
+    <h3>Who's in?</h3>
+    <table class="table">
+        <tr ng-class="{info: order.active}" ng-repeat="order in orders | orderBy: 'user.name'">
+            <td class="order-active"><input id="order-{{order.user.id}}" type="checkbox" ng-model="order.active"></td>
+            <td><label for="order-{{order.user.id}}" class="control-label">{{order.user.name}}</label></td>
+            <td>
+                <select class="form-control input-sm" ng-model="order.type" ng-show="order.active">
+                    <option value="Tea">Tea</option>
+                    <option value="Coffee">Coffee</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-control input-sm" ng-model="order.milk" ng-show="order.active">
+                    <option value="0">No milk</option>
+                    <option value="1">Some milk</option>
+                    <option value="2">Lots of milk</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-control input-sm" ng-model="order.sugars" ng-show="order.active">
+                    <option value="0">No sugar</option>
+                    <option value="1">1 sugar</option>
+                    <option value="2">2 sugars</option>
+                    <option value="3">3 sugars</option>
+                </select>
+            </td>
+            <td>
+                <input class="form-control input-sm" type="text" ng-model="order.notes" placeholder="Notes" ng-show="order.active">
+            </td>
+        </tr>
+    </table>
+    <button class="btn btn-primary btn-lg ladda-button"
+            data-style="expand-left"
+            type="submit"
+            ui-ladda="loading">
+            <span class="ladda-label">Done</span>
+    </button>
+    <a href="#/group/{{group.id}}" class="btn btn-lg btn-default">Cancel</a>
+</form>

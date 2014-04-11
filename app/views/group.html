@@ -1,35 +1,35 @@
 <div class="page-header clearfix">
-  <div class="dropdown pull-left">
-    <h1 class="dropdown-toggle" data-toggle="dropdown">
-      {{group.name}} <span class="caret"></span>
-    </h1>
-    <ul class="dropdown-menu" role="menu">
-      <li ng-repeat="membership in user.memberships">
-        <a href="#/group/{{membership.group.id}}">
-          {{membership.group.name}}
-        </a>
-      </li>
-      <li class="divider"></li>
-      <li><a href="#/group/add">
-        <span class="glyphicon glyphicon-plus"></span> Add group
-      </a></li>
-    </ul>
-  </div>
+    <div class="dropdown pull-left">
+        <h1 class="dropdown-toggle" data-toggle="dropdown">
+            {{group.name}} <span class="caret"></span>
+        </h1>
+        <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="membership in user.memberships">
+                <a href="#/group/{{membership.group.id}}">
+                    {{membership.group.name}}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#/group/add">
+                <span class="glyphicon glyphicon-plus"></span> Add group
+            </a></li>
+        </ul>
+    </div>
 
-  <ul class="nav nav-pills pull-right">
-    <li><a href="#/group/{{group.id}}/members"><span class="glyphicon glyphicon-user"></span> Edit Members</a></li>
-  </ul>
+    <ul class="nav nav-pills pull-right">
+        <li><a href="#/group/{{group.id}}/members"><span class="glyphicon glyphicon-user"></span> Edit Members</a></li>
+    </ul>
 </div>
 
 <div class="list-group clear">
-  <div class="list-group-item clearfix"
-    ng-class="{'list-group-item-success': membership.balance > 0,'list-group-item-warning': membership.balance < 0}"
-    ng-repeat="membership in group.memberships | orderBy: 'balance'">
-    <span class="badge">{{membership.balance}}</span>
-    {{membership.user.name}}
-  </div>
+    <div class="list-group-item clearfix"
+            ng-class="{'list-group-item-success': membership.balance > 0,'list-group-item-warning': membership.balance < 0}"
+            ng-repeat="membership in group.memberships | orderBy: 'balance'">
+        <span class="badge">{{membership.balance}}</span>
+        {{membership.user.name}}
+    </div>
 </div>
 
 <a href="#/group/{{group.id}}/round" class="btn btn-lg btn-primary">
-  <span class="glyphicon glyphicon-plus"></span> Make a round
+    <span class="glyphicon glyphicon-plus"></span> Make a round
 </a>
