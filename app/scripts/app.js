@@ -7,22 +7,21 @@ angular.module('roundzeroApp', [
     'ngRoute',
     'ui.bootstrap',
     'angularLocalStorage',
-    'mgcrea.ngStrap'
+    'mgcrea.ngStrap',
+    'mgcrea.ngStrap.tooltip',
+    'mgcrea.ngStrap.helpers.parseOptions'
 ])
 .config(function ($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'views/main.html'
+            templateUrl: 'views/main.html',
+            controller: 'MainCtrl'
         })
         .when('/sign-in', {
             templateUrl: 'views/sign-in.html'
         })
         .when('/account', {
             templateUrl: 'views/account.html'
-        })
-        .when('/groups', {
-            templateUrl: 'views/group.html',
-            controller: 'MainCtrl'
         })
         .when('/group/add', {
             templateUrl: 'views/add-group.html',
@@ -32,13 +31,13 @@ angular.module('roundzeroApp', [
             templateUrl: 'views/group.html',
             controller: 'GroupCtrl'
         })
-        .when('/round', {
-            templateUrl: 'views/round.html',
-            controller: 'MainCtrl'
+        .when('/group/:groupId/members', {
+            templateUrl: 'views/group-members.html',
+            controller: 'GroupMembersCtrl'
         })
-        .when('/order', {
-            templateUrl: 'views/order.html',
-            controller: 'MainCtrl'
+        .when('/group/:groupId/round', {
+            templateUrl: 'views/add-round.html',
+            controller: 'AddRoundCtrl'
         })
         .otherwise({
             redirectTo: '/'

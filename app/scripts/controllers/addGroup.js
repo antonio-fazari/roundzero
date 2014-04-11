@@ -8,6 +8,7 @@ angular.module('roundzeroApp')
             $scope.error = null;
 
             $scope.group = new GroupService();
+            $scope.user = AuthService.user;
 
             $scope.hideError = function () {
                 $scope.error = null;
@@ -29,7 +30,8 @@ angular.module('roundzeroApp')
 
                             membership.$save(
                                 function success(response) {
-                                    $location.path('/group/' + membership.groupId);
+                                    AuthService.user.memberships.push(response);
+                                    $location.path('/group/' + response.groupId + '/members');
                                 },
                                 function error(response) {
                                     $scope.loading = false;

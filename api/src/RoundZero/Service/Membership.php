@@ -15,7 +15,13 @@ class Membership
         $sql = 'SELECT * FROM memberships WHERE id  = ?';
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array($id));
-        return $stmt->fetch();
+        $result = $stmt->fetch();
+
+        $result->made = $this->countOrdersMade($result->userId, $result->groupId);
+        $result->received = $this->countOrdersReceived($result->userId, $result->groupId);
+        $result->balance = $result->made - $result->received;
+
+        return $result;
     }
 
     public function insert($membership)
@@ -30,7 +36,7 @@ class Membership
     {
         $sql = 'DELETE FROM memberships WHERE id = ?';
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(array($userId, $groupId));
+        $stmt->execute(array($id));
         return $stmt->rowCount();
     }
 

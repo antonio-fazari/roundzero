@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('SignInCtrl', ['$scope', '$http', '$location', 'AuthService',
-        function ($scope, $http, $location, AuthService) {
+    .controller('SignInCtrl', ['$scope', '$http', '$location', 'AuthService', 'UserService',
+        function ($scope, $http, $location, AuthService, UserService) {
             $scope.login = {
                 email: '',
                 password: '',
@@ -28,7 +28,11 @@ angular.module('roundzeroApp')
 
                         AuthService.login(response, $scope.login.remember);
 
-                        $location.path('/account');
+                        if (AuthService.user.memberships.length) {
+                            $location.path('/group/' + AuthService.user.memberships[0].groupId);
+                        } else {
+                            $location.path('/group/add');
+                        }
                     })
                     .error(function(response) {
                         $scope.loading = false;

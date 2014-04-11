@@ -30,7 +30,7 @@ class Token
         $token = $stmt->fetch();
 
         $userService = new User($this->db);
-        $token->user = $userService->findById($token->userId);
+        $token->user = $userService->findById($token->userId, true);
         return $token;
     }
 

@@ -35,7 +35,7 @@ angular.module('roundzeroApp')
                                 $scope.error = null;
 
                                 AuthService.login(response);
-                                $location.path('/account');
+                                $location.path('/group/add');
                             })
                             .error(function() {
                                 $scope.loading = false;

@@ -1,4 +1,22 @@
-<h1 class="page-header">Add group</h1>
+<div class="clearfix">
+  <div class="dropdown">
+    <h1 class="page-header dropdown-toggle" data-toggle="dropdown">
+      Add group <span class="caret"></span>
+    </h1>
+    <ul class="dropdown-menu" role="menu">
+      <li ng-repeat="membership in user.memberships">
+        <a href="#/group/{{membership.group.id}}">
+          {{membership.group.name}}
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li><a href="#/group/add">
+        <span class="glyphicon glyphicon-plus"></span> Add group
+      </a></li>
+    </ul>
+  </div>
+</div>
+
 <p class="lead">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 </p>

@@ -7,8 +7,21 @@ angular.module('roundzeroApp')
             $scope.loading = false;
             $scope.error = null;
 
+            $scope.user = null;
+
             $scope.membership = new MembershipService();
             $scope.membership.groupId = $routeParams.groupId;
+
+            $scope.getSuggestions = function (text) {
+                if (text) {
+                    return UserService.getSuggestions({
+                        partial: text,
+                        groupId: $routeParams.groupId
+                    }).$promise.then(function(res) {
+                        return res;
+                    });
+                }
+            };
 
             $scope.hideError = function () {
                 $scope.error = null;
@@ -19,13 +32,18 @@ angular.module('roundzeroApp')
                 $scope.error = null;
                 if (!$scope.form.$invalid) {
                     $scope.loading = true;
-                    var userId = 1; // TODO: Change to api call.
-                    $scope.membership.userId = userId;
+                    $scope.membership.userId = $scope.user.id;
+                    $scope.membership.user = $scope.user;
 
                     $scope.membership.$save(
                         function success(response) {
+                            response.user = $scope.user;
+                            $scope.$parent.group.memberships.push(response);
+
+                            $scope.user = null;
                             $scope.loading = false;
                             $scope.error = null;
+                            $scope.submitted = false;
                         },
                         function error(response) {
                             $scope.loading = false;

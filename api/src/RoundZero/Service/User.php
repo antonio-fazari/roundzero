@@ -17,12 +17,19 @@ class User
         return $stmt->fetchAll();
     }
 
-    public function findSuggestions($partial)
+    public function findSuggestions($partial, $groupId = null)
     {
         $sql = "SELECT id, created, changed, name, email FROM users
                 WHERE name LIKE CONCAT('%', ?, '%')";
+        $params = array($partial);
+
+        if ($groupId) {
+            $sql .= ' AND id NOT IN (SELECT userId from memberships WHERE groupId = ?)';
+            $params[] = $groupId;
+        }
+
         $stmt = $this->db->query($sql);
-        $stmt->execute(array($partial));
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 

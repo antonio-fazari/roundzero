@@ -93,7 +93,8 @@ $app->get('/v1/users', function () use ($userService, $app) {
 });
 
 $app->get('/v1/users/suggestions/:partial', function ($partial) use ($userService, $app) {
-    echo json_encode($userService->findSuggestions($partial));
+    $groupId = $app->request->params('groupId');
+    echo json_encode($userService->findSuggestions($partial, $groupId));
 });
 
 $app->post('/v1/users', function () use ($userService, $app) {
@@ -251,7 +252,7 @@ $app->post('/v1/memberships', function () use ($membershipService, $app) {
 
     $app->response->setStatus(201);
     $app->response->headers->set('Location', '/v1/memberships/' . $id);
-    echo json_encode($membershipService->findById($id));
+    echo json_encode($membershipService->findById($id, true));
 });
 
 $app->options('/v1/memberships/:id', function () use ($app) {
@@ -318,6 +319,10 @@ $app->delete('/v1/rounds/:id', function ($id) use ($roundService, $app) {
 
 // Orders
 
+$app->options('/v1/rounds/:roundId/orders', function () use ($app) {
+    $app->response->setStatus('Allow', 'GET,POST');
+});
+
 $app->get('/v1/rounds/:roundId/orders', function ($roundId) use ($roundService, $orderService, $app) {
     if ($round = $roundService->findById($roundId)) {
         echo json_encode($orderService->findAllForRound($roundId));
@@ -357,6 +362,10 @@ $app->put('/v1/rounds/:roundId/orders/:id', function ($roundId, $id) use ($order
         $app->response->setStatus(404);
         echo json_encode(array('error' => "Order $id not found"));
     }
+});
+
+$app->options('/v1/rounds/:roundId/orders/:id', function () use ($app) {
+    $app->response->setStatus('Allow', 'GET');
 });
 
 $app->delete('/v1/rounds/:roundId/orders/:id', function ($roundId, $id) use ($orderService, $app) {

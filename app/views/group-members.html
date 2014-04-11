@@ -1,0 +1,61 @@
+<div class="page-header clearfix">
+  <div class="dropdown pull-left">
+    <h1 class="dropdown-toggle" data-toggle="dropdown">
+      {{group.name}} <span class="caret"></span>
+    </h1>
+    <ul class="dropdown-menu" role="menu">
+      <li ng-repeat="membership in user.memberships">
+        <a href="#/group/{{membership.group.id}}">
+          {{membership.group.name}}
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li><a href="#/group/add">
+        <span class="glyphicon glyphicon-plus"></span> Add group
+      </a></li>
+    </ul>
+  </div>
+
+  <ul class="nav nav-pills pull-right">
+    <li class="active"><a href="#/group/{{group.id}}/members"><span class="glyphicon glyphicon-user"></span> Edit Members</a></li>
+  </ul>
+</div>
+
+<p class="lead">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+</p>
+
+<alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
+<form name="form" role="form" ng-controller="AddMembershipCtrl"
+      ng-submit="submit()" novalidate>
+    <div class="form-group" ng-class="{'has-error': form.name.$invalid && submitted}">
+        <div class="input-group">
+          <label class="sr-only" for="group-name">Name</label>
+          <input id="group-name"
+                  name="name"
+                  type="text"
+                  class="form-control input-lg"
+                  placeholder="Name"
+                  required
+                  ng-model="user"
+                  ng-options="user as user.name for user in getSuggestions($viewValue)"
+                  autocomplete="off"
+                  group-typeahead>
+          <span class="input-group-btn">
+            <button class="btn btn-primary btn-lg" type="submit">Add</button>
+          </span>
+        </div>
+    </div>
+</form>
+
+<div class="list-group">
+  <div class="list-group-item clearfix"
+    ng-repeat="membership in group.memberships | orderBy: 'user.name'">
+    <button type="button" class="close pull-right" ng-click="removeMembership(membership)">&times;</button>
+    <h4 class="list-group-item-heading pull-left">
+      {{membership.user.name}}
+    </h4>
+  </div>
+</div>
+
+<a href="#/group/{{group.id}}" class="btn btn-lg btn-primary">Done</a>
