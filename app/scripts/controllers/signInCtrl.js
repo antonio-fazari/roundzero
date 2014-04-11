@@ -1,29 +1,24 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('SignInCtrl', function ($scope, $http, $location, AuthService) {
+    .controller('SignInCtrl', function ($scope, $controller, $http, $location, AuthService) {
+        $controller('FormCtrl', {$scope: $scope});
+
         $scope.login = {
             email: '',
             password: '',
             remember: true
         };
-        $scope.submitted = false;
-        $scope.loading = false;
-        $scope.error = null;
-
-        $scope.hideError = function () {
-            $scope.error = null;
-        };
 
         $scope.signIn = function () {
-            $scope.submitted = true;
-            $scope.error = null;
+            $scope.setStateSubmitted();
+
             if (!$scope.form.$invalid) {
-                $scope.loading = true;
+                $scope.setStateLoading();
+
                 $http.post('http://api.roundzeroapp.com/v1/tokens/authenticate', $scope.login)
                 .success(function(response) {
-                    $scope.loading = false;
-                    $scope.error = null;
+                    $scope.setStateSuccess();
 
                     AuthService.login(response, $scope.login.remember);
 
@@ -33,15 +28,7 @@ angular.module('roundzeroApp')
                         $location.path('/group/add');
                     }
                 })
-                .error(function(response) {
-                    $scope.loading = false;
-
-                    if (response.error) {
-                        $scope.error = response.error;
-                    } else {
-                        $scope.error = 'There was an error logging in. Please try later.';
-                    }
-                });
+                .error($scope.setStateError);
             }
         };
     });

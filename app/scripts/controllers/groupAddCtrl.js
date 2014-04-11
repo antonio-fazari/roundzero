@@ -1,57 +1,36 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('GroupAddCtrl', function ($scope, $location, AuthService, GroupService, MembershipService) {
-        $scope.submitted = false;
-        $scope.loading = false;
-        $scope.error = null;
-
+    .controller('GroupAddCtrl', function ($scope, $controller, $location, AuthService, GroupService, MembershipService) {
+        $controller('FormCtrl', {$scope: $scope});
         $scope.group = new GroupService();
         $scope.user = AuthService.user;
 
-        $scope.hideError = function () {
-            $scope.error = null;
-        };
-
         $scope.submit = function () {
-            $scope.submitted = true;
-            $scope.error = null;
+            $scope.setStateSubmitted();
+
             if (!$scope.form.$invalid) {
-                $scope.loading = true;
+                $scope.setStateLoading();
+
                 $scope.group.$save(
                     function success(response) {
-                        $scope.loading = false;
-                        $scope.error = null;
                         // Add member that created the group.
-                        var membership = new MembershipService();
-                        membership.groupId = response.id;
-                        membership.userId = AuthService.userId;
+                        var membership = new MembershipService({
+                            groupId: response.id,
+                            userId: AuthService.userId
+                        });
 
                         membership.$save(
                             function success(response) {
+                                $scope.setStateSuccess();
                                 AuthService.user.memberships.push(response);
                                 $location.path('/group/' + response.groupId + '/members');
                             },
-                            function error(response) {
-                                $scope.loading = false;
-
-                                if (response.error) {
-                                    $scope.error = response.error;
-                                } else {
-                                    $scope.error = 'There was an error logging in. Please try later.';
-                                }
-                            }
+                            $scope.setStateError
                         );
                     },
-                    function error(response) {
-                        $scope.loading = false;
-
-                        if (response.error) {
-                            $scope.error = response.error;
-                        } else {
-                            $scope.error = 'There was an error creating your group. Please try later.';
-                        }
-                    });
+                    $scope.setStateError
+                );
             }
         };
     });

@@ -5,11 +5,8 @@ angular.module('roundzeroApp', [
     'ngResource',
     'ngSanitize',
     'ngRoute',
-    'ui.bootstrap',
     'angularLocalStorage',
-    'mgcrea.ngStrap',
-    'mgcrea.ngStrap.tooltip',
-    'mgcrea.ngStrap.helpers.parseOptions'
+    'mgcrea.ngStrap'
 ])
 .config(function ($routeProvider) {
     $routeProvider
@@ -30,6 +27,10 @@ angular.module('roundzeroApp', [
         .when('/group/:groupId', {
             templateUrl: 'views/group.html',
             controller: 'GroupCtrl'
+        })
+        .when('/group/:groupId/edit', {
+            templateUrl: 'views/groupEdit.html',
+            controller: 'GroupEditCtrl'
         })
         .when('/group/:groupId/members', {
             templateUrl: 'views/memberships.html',

@@ -65,6 +65,9 @@ $headings-color:          #2B3A42 !default;
 $navbar-inverse-bg:                         #3F5765 !default;
 $navbar-inverse-link-color:                 #BDD4DE !default;
 
+$caret-width-base:               6px !default;
+$caret-width-large:              8px !default;
+
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
 
 .browsehappy {

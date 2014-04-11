@@ -1,10 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('RoundAddCtrl', function ($scope, $routeParams, $location, $q, GroupService, RoundService, OrderService, AuthService) {
-        $scope.submitted = false;
-        $scope.loading = false;
-        $scope.error = null;
+    .controller('RoundAddCtrl', function ($scope, $controller, $routeParams, $location, $q, GroupService, RoundService, OrderService, AuthService) {
+        $controller('FormCtrl', {$scope: $scope});
 
         $scope.user = AuthService.user;
         $scope.group = GroupService.get({id: $routeParams.groupId});
@@ -24,19 +22,16 @@ angular.module('roundzeroApp')
             }
         });
 
-        $scope.round = new RoundService();
-        $scope.round.groupId = $routeParams.groupId;
-        $scope.round.userId = AuthService.userId;
-
-        $scope.hideError = function () {
-            $scope.error = null;
-        };
+        $scope.round = new RoundService({
+            groupId: $routeParams.groupId,
+            userId: AuthService.userId
+        });
 
         $scope.submit = function () {
-            $scope.submitted = true;
-            $scope.error = null;
+            $scope.setStateSubmitted();
+
             if (!$scope.form.$invalid) {
-                $scope.loading = true;
+                $scope.setStateLoading();
 
                 $scope.round.$save(
                     function success(response) {
@@ -53,22 +48,13 @@ angular.module('roundzeroApp')
                         });
 
                         $q.all(promises).then(function () {
-                            $scope.loading = false;
-                            $scope.error = null;
-                            $scope.submitted = false;
+                            $scope.setStateSuccess();
 
                             $location.path('/group/' + $routeParams.groupId);
                         });
                     },
-                    function error(response) {
-                        $scope.loading = false;
-
-                        if (response.error) {
-                            $scope.error = response.error;
-                        } else {
-                            $scope.error = 'There was an error creating your round. Please try later.';
-                        }
-                    });
+                    $scope.setStateError
+                );
             }
         };
     });

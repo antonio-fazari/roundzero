@@ -29,7 +29,7 @@
                 <dt>Email address</dt>
                 <dd>{{user.email}}</dd>
             </dl>
-            <button type="button" class="btn btn-default" ng-click="edit()">
+            <button type="button" class="btn btn-default" ng-click="editMode = true">
                 <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
         </div>
@@ -37,7 +37,7 @@
             <alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
             <form name="form" role="form" ng-submit="update()" novalidate>
                 <div class="form-group" ng-class="{'has-error': form.name.$invalid && submitted}">
-                    <label for="details-name">Name</label>
+                    <label class="control-label" for="details-name">Name</label>
                     <input id="details-name"
                             name="name"
                             type="text"
@@ -50,7 +50,7 @@
                     </p>
                 </div>
                 <div class="form-group" ng-class="{'has-error': form.email.$invalid && submitted}">
-                    <label for="details-email">Email address</label>
+                    <label class="control-label" for="details-email">Email address</label>
                     <input class="form-control input-sm"
                             id="details-email"
                             name="email"
@@ -71,7 +71,7 @@
                         ui-ladda="loading">
                     <span class="ladda-label">Update</span>
                 </button>
-                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                <button class="btn btn-default" ng-click="editMode = false">Cancel</button>
             </form>
         </div>
     </div>
@@ -83,7 +83,7 @@
             </h3>
         </div>
         <div class="panel-body" ng-show="!editMode">
-            <button type="button" class="btn btn-default" ng-click="edit()">
+            <button type="button" class="btn btn-default" ng-click="editMode = true">
                 <span class="glyphicon glyphicon-pencil"></span> Change password
             </button>
         </div>
@@ -91,7 +91,7 @@
             <alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
             <form name="form" role="form" ng-submit="update()" novalidate>
                 <div class="form-group" ng-class="{'has-error': form.password.$invalid && submitted}">
-                    <label for="password">New password</label>
+                    <label class="control-label" for="password">New password</label>
                     <input class="form-control input-sm"
                             id="password"
                             name="password"
@@ -104,7 +104,7 @@
                     </p>
                 </div>
                 <div class="form-group" ng-class="{'has-error': form.passwordConf.$invalid && submitted}">
-                    <label for="password-conf">Confirm password</label>
+                    <label class="control-label" for="password-conf">Confirm password</label>
                     <input class="form-control input-sm"
                             id="password-conf"
                             name="passwordConf"
@@ -126,7 +126,7 @@
                         ui-ladda="loading">
                     <span class="ladda-label">Update</span>
                 </button>
-                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                <button class="btn btn-default" ng-click="editMode = false">Cancel</button>
             </form>
         </div>
     </div>

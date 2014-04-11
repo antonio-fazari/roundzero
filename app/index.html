@@ -37,10 +37,13 @@
                 </button>
             </div>
             <div ng-show="AuthService.loggedIn">
-                <ul id="user-menu" class="nav navbar-nav navbar-right collapse navbar-collapse">
-                    <li><a href="#/account">Account</a></li>
-                    <li><a ng-click="logout()">Sign out</a></li>
-                </ul>
+                <div id="user-menu" class="collapse navbar-collapse navbar-right">
+                    <div class="navbar-text"><span class="glyphicon glyphicon-user"></span> Signed in as <em>{{AuthService.user.name}}</em></div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#/account">My Account</a></li>
+                        <li><a ng-click="logout()">Sign out</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -73,7 +76,6 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angularLocalStorage/src/angularLocalStorage.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/spin.js/spin.js"></script>
@@ -95,10 +97,12 @@
     <script src="scripts/services/tokenService.js"></script>
     <script src="scripts/services/userService.js"></script>
     <script src="scripts/services/membershipService.js"></script>
+    <script src="scripts/controllers/formCtrl.js"></script>
     <script src="scripts/controllers/accountDetailsCtrl.js"></script>
     <script src="scripts/controllers/accountPasswordCtrl.js"></script>
     <script src="scripts/controllers/groupAddCtrl.js"></script>
     <script src="scripts/controllers/groupCtrl.js"></script>
+    <script src="scripts/controllers/groupEditCtrl.js"></script>
     <script src="scripts/controllers/headerCtrl.js"></script>
     <script src="scripts/controllers/mainCtrl.js"></script>
     <script src="scripts/controllers/membershipsAddCtrl.js"></script>

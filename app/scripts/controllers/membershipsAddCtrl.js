@@ -1,11 +1,8 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .controller('MembershipsAddCtrl', function ($scope, $routeParams, $location, MembershipService, UserService) {
-        $scope.submitted = false;
-        $scope.loading = false;
-        $scope.error = null;
-
+    .controller('MembershipsAddCtrl', function ($scope, $controller, $routeParams, $location, MembershipService, UserService) {
+        $controller('FormCtrl', {$scope: $scope});
         $scope.user = null;
 
         $scope.membership = new MembershipService();
@@ -22,37 +19,25 @@ angular.module('roundzeroApp')
             }
         };
 
-        $scope.hideError = function () {
-            $scope.error = null;
-        };
-
         $scope.submit = function () {
-            $scope.submitted = true;
-            $scope.error = null;
+            $scope.setStateSubmitted();
+
             if (!$scope.form.$invalid) {
-                $scope.loading = true;
+                $scope.setStateLoading();
+
                 $scope.membership.userId = $scope.user.id;
                 $scope.membership.user = $scope.user;
 
                 $scope.membership.$save(
                     function success(response) {
+                        $scope.setStateSuccess();
+
                         response.user = $scope.user;
                         $scope.$parent.group.memberships.push(response);
-
                         $scope.user = null;
-                        $scope.loading = false;
-                        $scope.error = null;
-                        $scope.submitted = false;
                     },
-                    function error(response) {
-                        $scope.loading = false;
-
-                        if (response.error) {
-                            $scope.error = response.error;
-                        } else {
-                            $scope.error = 'There was an error creating your group. Please try later.';
-                        }
-                    });
+                    $scope.setStateError
+                );
             }
         };
     });

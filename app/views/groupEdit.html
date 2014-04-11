@@ -1,0 +1,51 @@
+<div class="page-header clearfix">
+    <div class="dropdown pull-left">
+        <h1 class="dropdown-toggle" data-toggle="dropdown">
+            {{group.name}} <span class="caret"></span>
+        </h1>
+        <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="membership in user.memberships">
+                <a href="#/group/{{membership.group.id}}">
+                    {{membership.group.name}}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#/group/add">
+                <span class="glyphicon glyphicon-plus"></span> Add group
+            </a></li>
+        </ul>
+    </div>
+
+    <ul class="nav nav-pills pull-right">
+        <li><a href="#/group/{{group.id}}"><span class="glyphicon glyphicon-eye-open"></span> View</a></li>
+        <li><a href="#/group/{{group.id}}/members"><span class="glyphicon glyphicon-user"></span> Members</a></li>
+        <li class="active"><a href="#/group/{{group.id}}/edit"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+    </ul>
+</div>
+
+<h2>Edit group</h2>
+
+<alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
+<form name="form" role="form" ng-submit="submit()" novalidate>
+    <div class="form-group" ng-class="{'has-error': form.name.$invalid && submitted}">
+        <label class="control-label" for="group-name">Name</label>
+        <input id="group-name"
+                name="name"
+                type="text"
+                class="form-control input-lg"
+                placeholder="Name"
+                required
+                ng-model="group.name">
+        <p class="help-block error" ng-show="form.name.$error.required && submitted">
+            Required
+        </p>
+    </div>
+    <button class="btn btn-primary btn-lg ladda-button"
+            data-style="expand-left"
+            type="submit"
+            ui-ladda="loading">
+        <span class="ladda-label">Save</span>
+    </button>
+</form>
+
+
