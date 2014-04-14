@@ -23,31 +23,15 @@
     </ul>
 </div>
 
-<h2>Edit group</h2>
+<h2>Delete group?</h2>
 
-<alert type="'danger'" ng-show="error" close="hideError()">{{error}}</alert>
-<form name="form" role="form" ng-submit="submit()" novalidate>
-    <div class="form-group" ng-class="{'has-error': form.name.$invalid && submitted}">
-        <label class="control-label" for="group-name">Name</label>
-        <input id="group-name"
-                name="name"
-                type="text"
-                class="form-control input-lg"
-                placeholder="Name"
-                required
-                ng-model="group.name">
-        <p class="help-block error" ng-show="form.name.$error.required && submitted">
-            Required
-        </p>
-    </div>
-    <button class="btn btn-primary btn-lg ladda-button"
-            data-style="expand-left"
-            type="submit"
-            ui-ladda="loading">
-        <span class="ladda-label">Save</span>
-    </button>
+<p>Are you really sure you want to delete this this group? There's no going back!</p>
 
-    <a href="#/group/{{group.id}}/delete" class="btn btn-lg btn-danger" ng-click="delete()">Delete</a>
-
-</form>
+<button class="btn btn-lg btn-danger ladda-button"
+        data-style="expand-left"
+        ui-ladda="progress"
+        ng-click="delete()">
+    <span class="ladda-label">Delete</span>
+</button>
+<a class="btn btn-lg btn-default" href="#/group/{{group.id}}/edit">Cancel</a>
 

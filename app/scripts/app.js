@@ -32,6 +32,10 @@ angular.module('roundzeroApp', [
             templateUrl: 'views/groupEdit.html',
             controller: 'GroupEditCtrl'
         })
+        .when('/group/:groupId/delete', {
+            templateUrl: 'views/groupDelete.html',
+            controller: 'GroupDeleteCtrl'
+        })
         .when('/group/:groupId/members', {
             templateUrl: 'views/memberships.html',
             controller: 'MembershipsCtrl'
