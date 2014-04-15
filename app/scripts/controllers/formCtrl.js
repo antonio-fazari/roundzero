@@ -30,7 +30,7 @@ angular.module('roundzeroApp')
             if (response.error) {
                 $scope.error = response.error;
             } else {
-                $scope.error = 'There was processing your request. Please try later.';
+                $scope.error = 'There was an error processing your request. Please try later.';
             }
         };
     });

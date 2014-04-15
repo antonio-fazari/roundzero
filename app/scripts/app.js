@@ -18,7 +18,16 @@ angular.module('roundzeroApp', [
             templateUrl: 'views/signIn.html'
         })
         .when('/account', {
-            templateUrl: 'views/account.html'
+            templateUrl: 'views/account.html',
+            controller: 'GroupAddCtrl'
+        })
+        .when('/forgot-password', {
+            templateUrl: 'views/forgotPassword.html',
+            controller: 'ForgotPasswordCtrl'
+        })
+        .when('/reset-password', {
+            templateUrl: 'views/resetPassword.html',
+            controller: 'ResetPasswordCtrl'
         })
         .when('/group/add', {
             templateUrl: 'views/groupAdd.html',
@@ -48,13 +57,25 @@ angular.module('roundzeroApp', [
             redirectTo: '/'
         });
 })
-.run(function($rootScope, $location, AuthService) {
+.run(function($rootScope, $location, AuthService, TokenService) {
         // register listener to watch route changes
         $rootScope.$on('$routeChangeStart', function(event, next) {
             if (!AuthService.loggedIn) {
-                // no logged user, we should be going to #login
-                if (next.templateUrl !== 'partials/sign-in.html') {
-                    $location.path('/sign-in');
+                if ($location.search().token) {
+                    TokenService.get({id: $location.search().token},
+                        function success(response) {
+                            AuthService.login(response, false);
+                        },
+                        function error() {
+                            $location.path('/sign-in');
+                        }
+                    );
+                } else {
+                    // No logged user, we should be going to #login
+                    if (next.templateUrl !== 'views/signIn.html' &&
+                        next.templateUrl !== 'views/forgotPassword.html') {
+                        $location.path('/sign-in');
+                    }
                 }
             }
         });

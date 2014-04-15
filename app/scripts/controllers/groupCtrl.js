@@ -8,12 +8,9 @@ angular.module('roundzeroApp')
 
         $scope.group.$promise.then(function () {
             angular.forEach($scope.group.memberships, function (membership) {
-                console.log(membership);
                 if ($scope.lowestBalance === null || membership.balance < $scope.lowestBalance) {
                     $scope.lowestBalance = membership.balance;
                 }
             });
-
-            console.log($scope.lowestBalance);
         });
     });

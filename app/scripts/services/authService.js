@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('roundzeroApp')
-    .service('AuthService', function(storage, TokenHandler, UserService) {
+    .service('AuthService', function($location, storage, TokenHandler, UserService) {
             var token = storage.get('token') || null;
 
             this.loggedIn = false;
@@ -16,10 +16,9 @@ angular.module('roundzeroApp')
 
                 // Get user from fresh token.
                 if (token.user) {
-                    this.user = token.user;
+                    this.user = new UserService(token.user);
                 } else {
-                    var self = this;
-                    self.user = UserService.get({id: this.userId});
+                    this.user = UserService.get({id: this.userId});
                 }
 
                 if (remember) {

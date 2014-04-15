@@ -11,14 +11,27 @@ angular.module('roundzeroApp')
         $scope.group.$promise.then(function (res) {
             var memberships = res.memberships;
             for (var i = 0; i < memberships.length; i++) {
-                $scope.orders.push({
-                    active: false,
-                    user: memberships[i].user,
-                    type: 'Tea',
-                    milk: 0,
-                    sugars: 0,
-                    notes: ''
-                });
+                if (memberships[i].lastOrder) {
+                    // Use last order details.
+                    $scope.orders.push({
+                        active: false,
+                        user: memberships[i].user,
+                        type: memberships[i].lastOrder.type,
+                        milk: memberships[i].lastOrder.milk,
+                        sugars: memberships[i].lastOrder.sugars,
+                        notes: memberships[i].lastOrder.notes
+                    });
+                } else {
+                    // Default order.
+                    $scope.orders.push({
+                        active: false,
+                        user: memberships[i].user,
+                        type: 'Tea',
+                        milk: 0,
+                        sugars: 0,
+                        notes: ''
+                    });
+                }
             }
         });
 

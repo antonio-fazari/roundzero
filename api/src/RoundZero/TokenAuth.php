@@ -58,6 +58,8 @@ class TokenAuth extends \Slim\Middleware
 
         if ($env['REQUEST_METHOD'] == 'OPTIONS'
                 || $env['PATH_INFO'] == '/v1/tokens/authenticate'
+                || (strpos($env['PATH_INFO'], '/v1/tokens/') === 0  && $env['REQUEST_METHOD'] == 'GET')
+                || $env['PATH_INFO'] == '/v1/reset-password'
                 || ($env['PATH_INFO'] == '/v1/users' && $env['REQUEST_METHOD'] == 'POST')) {
             return false;
         }

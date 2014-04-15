@@ -127,4 +127,17 @@ class User
         $user->salt = uniqid(mt_rand(), true);
         $user->password = crypt($user->password, $user->salt);
     }
+
+    public function resetPassword($user)
+    {
+        $tokenService = new Token($this->db);
+        $token = $tokenService->create($user->id);
+        $url = 'http://www.roundzeroapp.com/#/reset-password?token=' . $token;
+
+        $body = "Visit the following link to reset your password\n$url";
+        $subject = "Round Zero reset password";
+        mail($user->email, $subject, $body);
+        var_dump($body);
+        exit;
+    }
 }

@@ -17,9 +17,7 @@ class Membership
         $stmt->execute(array($id));
         $result = $stmt->fetch();
 
-        $result->made = $this->countOrdersMade($result->userId, $result->groupId);
-        $result->received = $this->countOrdersReceived($result->userId, $result->groupId);
-        $result->balance = $result->made - $result->received;
+        $this->addInfo($result);
 
         return $result;
     }
@@ -50,10 +48,7 @@ class Membership
         $groupService = new Group($this->db);
 
         foreach ($results as $i => $result) {
-            $results[$i]->group = $groupService->findById($result->groupId);
-            $results[$i]->made = $this->countOrdersMade($result->userId, $result->groupId);
-            $results[$i]->received = $this->countOrdersReceived($result->userId, $result->groupId);
-            $results[$i]->balance = $results[$i]->made - $results[$i]->received;
+            $this->addInfo($result);
         }
 
         return $results;
@@ -66,13 +61,8 @@ class Membership
         $stmt->execute(array($id));
         $results = $stmt->fetchAll();
 
-        $userService = new User($this->db);
-
         foreach ($results as $i => $result) {
-            $results[$i]->user = $userService->findById($result->userId);
-            $results[$i]->made = $this->countOrdersMade($result->userId, $result->groupId);
-            $results[$i]->received = $this->countOrdersReceived($result->userId, $result->groupId);
-            $results[$i]->balance = $results[$i]->made - $results[$i]->received;
+            $this->addInfo($result);
         }
 
         return $results;
@@ -96,5 +86,17 @@ class Membership
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array($userId, $groupId));
         return (int) $stmt->fetchColumn();
+    }
+
+    protected function addInfo($result)
+    {
+        $userService = new User($this->db);
+        $orderService = new Order($this->db);
+
+        $result->user = $userService->findById($result->userId);
+        $result->made = $this->countOrdersMade($result->userId, $result->groupId);
+        $result->received = $this->countOrdersReceived($result->userId, $result->groupId);
+        $result->balance = $result->made - $result->received;
+        $result->lastOrder = $orderService->findLastForUser($result->userId);
     }
 }

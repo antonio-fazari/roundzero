@@ -378,4 +378,19 @@ $app->delete('/v1/rounds/:roundId/orders/:id', function ($roundId, $id) use ($or
     }
 });
 
+$app->options('/v1/reset-password', function () use ($app) {
+    $app->response->setStatus('Allow', 'POST');
+});
+
+$app->post('/v1/reset-password', function () use ($userService, $app) {
+    $data = json_decode($app->request->getBody());
+    if ($user = $userService->findByEmail($data->email)) {
+        $userService->resetPassword($user);
+        $app->response->setStatus(204);
+    } else {
+        $app->response->setStatus(404);
+        echo json_encode(array('error' => "User with email address $email not found"));
+    }
+});
+
 $app->run();
