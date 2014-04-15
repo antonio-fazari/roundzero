@@ -70,6 +70,10 @@ $caret-width-large:              8px !default;
 
 @import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
 
+* {
+
+}
+
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
@@ -96,4 +100,15 @@ td.order-active {
 
 .navbar-brand a {
     color: white;
+}
+
+.container-2col {
+  .column {
+    width: 50%;
+    float: left;
+
+    .panel {
+      margin: 0 5px 20px;
+    }
+  }
 }

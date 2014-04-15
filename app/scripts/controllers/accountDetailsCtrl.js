@@ -5,6 +5,7 @@ angular.module('roundzeroApp')
         $controller('FormCtrl', {$scope: $scope});
         $scope.editMode = false;
         $scope.user = AuthService.user;
+        console.log($scope.user);
 
         $scope.update = function () {
             $scope.setStateSubmitted();
