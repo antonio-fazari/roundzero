@@ -4,35 +4,47 @@ angular.module('roundzeroApp')
     .controller('RoundAddCtrl', function ($scope, $controller, $routeParams, $location, $q, GroupService, RoundService, OrderService, AuthService) {
         $controller('FormCtrl', {$scope: $scope});
 
+        var previousOrders = {};
+
         $scope.user = AuthService.user;
         $scope.group = GroupService.get({id: $routeParams.groupId});
         $scope.orders = [];
 
+        $scope.changeType = function (order) {
+            angular.forEach(previousOrders[order.user.id], function (previousOrder) {
+                if (previousOrder.type === order.type) {
+                    order.milk = previousOrder.milk;
+                    order.sugars = previousOrder.sugars;
+                    order.notes = previousOrder.notes;
+                }
+            });
+        };
+
         $scope.group.$promise.then(function (res) {
-            var memberships = res.memberships;
-            for (var i = 0; i < memberships.length; i++) {
-                if (memberships[i].lastOrder) {
+            angular.forEach(res.memberships, function (membership) {
+                previousOrders[membership.user.id] = membership.lastOrders;
+                if (membership.lastOrders.length) {
                     // Use last order details.
                     $scope.orders.push({
                         active: false,
-                        user: memberships[i].user,
-                        type: memberships[i].lastOrder.type,
-                        milk: memberships[i].lastOrder.milk,
-                        sugars: memberships[i].lastOrder.sugars,
-                        notes: memberships[i].lastOrder.notes
+                        user: membership.user,
+                        type: membership.lastOrders[0].type,
+                        milk: membership.lastOrders[0].milk,
+                        sugars: membership.lastOrders[0].sugars,
+                        notes: membership.lastOrders[0].notes
                     });
                 } else {
                     // Default order.
                     $scope.orders.push({
                         active: false,
-                        user: memberships[i].user,
+                        user: membership.user,
                         type: 'Tea',
                         milk: 0,
                         sugars: 0,
                         notes: ''
                     });
                 }
-            }
+            });
         });
 
         $scope.round = new RoundService({

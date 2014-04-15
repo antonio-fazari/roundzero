@@ -38,10 +38,12 @@ class Order
 
     public function findLastForUser($userId)
     {
-        $sql = 'SELECT * FROM orders WHERE userId  = ? ORDER BY created DESC LIMIT 1';
+        $sql = 'SELECT * FROM
+            (SELECT * FROM orders WHERE userId  = ? ORDER BY created DESC)
+            orders_sorted GROUP BY type';
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array($userId));
-        return $stmt->fetch();
+        return $stmt->fetchAll();
     }
 
     public function insert($order)

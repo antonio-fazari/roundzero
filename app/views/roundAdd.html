@@ -46,6 +46,7 @@
                     <label for="order-{{order.user.id}}-type" class="sr-only">Type</label>
                     <select id="order-{{order.user.id}}-type"
                             class="form-control input-sm"
+                            ng-change="changeType(order)"
                             ng-model="order.type">
                         <option value="Tea">Tea</option>
                         <option value="Coffee">Coffee</option>

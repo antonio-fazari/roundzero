@@ -49,7 +49,7 @@ $app->post('/v1/tokens/authenticate', function () use ($userService, $tokenServi
     if ($user = $userService->findByLogin($login->email, $login->password)) {
         $id = $tokenService->create($user->id);
         $app->response->setStatus(201);
-        $app->response->headers->set('Location', '/v1/tokens/' . $id);
+        //$app->response->headers->set('Location', '/v1/tokens/' . $id);
         echo json_encode($tokenService->findById($id));
     } else {
         $app->response->setStatus(404);
@@ -102,7 +102,7 @@ $app->post('/v1/users', function () use ($userService, $app) {
     $id = $userService->insert($user);
 
     $app->response->setStatus(201);
-    $app->response->headers->set('Location', '/v1/users/' . $id);
+    //$app->response->headers->set('Location', '/v1/users/' . $id);
     echo json_encode($userService->findById($id));
 });
 
@@ -202,7 +202,7 @@ $app->post('/v1/groups', function () use ($groupService, $app) {
     $id = $groupService->insert($group);
 
     $app->response->setStatus(201);
-    $app->response->headers->set('Location', '/v1/groups/' . $id);
+    //$app->response->headers->set('Location', '/v1/groups/' . $id);
     echo json_encode($groupService->findById($id, true));
 });
 
@@ -251,7 +251,7 @@ $app->post('/v1/memberships', function () use ($membershipService, $app) {
     $id = $membershipService->insert($membership);
 
     $app->response->setStatus(201);
-    $app->response->headers->set('Location', '/v1/memberships/' . $id);
+    //$app->response->headers->set('Location', '/v1/memberships/' . $id);
     echo json_encode($membershipService->findById($id, true));
 });
 
@@ -290,7 +290,7 @@ $app->post('/v1/rounds', function () use ($roundService, $app) {
     $id = $roundService->insert($round);
 
     $app->response->setStatus(201);
-    $app->response->headers->set('Location', '/v1/rounds/' . $id);
+    //$app->response->headers->set('Location', '/v1/rounds/' . $id);
     echo json_encode($roundService->findById($id));
 });
 

@@ -12,12 +12,15 @@ class Membership
 
     public function findById($id)
     {
-        $sql = 'SELECT * FROM memberships WHERE id  = ?';
+        $sql = 'SELECT memberships.*, MAX(rounds.created) lastRoundCreated FROM memberships
+            LEFT JOIN rounds ON rounds.userId = memberships.userId AND rounds.groupId = memberships.groupId
+            WHERE memberships.id = ?
+            GROUP BY memberships.id';
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array($id));
         $result = $stmt->fetch();
 
-        $this->addInfo($result);
+        $this->addInfo($result, true, true);
 
         return $result;
     }
@@ -40,15 +43,16 @@ class Membership
 
     public function findAllForUser($id)
     {
-        $sql = 'SELECT * FROM memberships WHERE userId  = ?';
+        $sql = 'SELECT memberships.*, MAX(rounds.created) lastRoundCreated FROM memberships
+            LEFT JOIN rounds ON rounds.userId = memberships.userId AND rounds.groupId = memberships.groupId
+            WHERE memberships.userId = ?
+            GROUP BY memberships.id';
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array($id));
         $results = $stmt->fetchAll();
 
-        $groupService = new Group($this->db);
-
         foreach ($results as $i => $result) {
-            $this->addInfo($result);
+            $this->addInfo($result, false, true);
         }
 
         return $results;
@@ -56,13 +60,16 @@ class Membership
 
     public function findAllForGroup($id)
     {
-        $sql = 'SELECT * FROM memberships WHERE groupId  = ?';
+        $sql = 'SELECT memberships.*, MAX(rounds.created) lastRoundCreated FROM memberships
+            LEFT JOIN rounds ON rounds.userId = memberships.userId AND rounds.groupId = memberships.groupId
+            WHERE memberships.groupId = ?
+            GROUP BY memberships.id';
         $stmt = $this->db->prepare($sql);
         $stmt->execute(array($id));
         $results = $stmt->fetchAll();
 
         foreach ($results as $i => $result) {
-            $this->addInfo($result);
+            $this->addInfo($result, true, false);
         }
 
         return $results;
@@ -88,15 +95,23 @@ class Membership
         return (int) $stmt->fetchColumn();
     }
 
-    protected function addInfo($result)
+    protected function addInfo($result, $includeUser = false, $includeGroup = false)
     {
-        $userService = new User($this->db);
-        $orderService = new Order($this->db);
-
-        $result->user = $userService->findById($result->userId);
         $result->made = $this->countOrdersMade($result->userId, $result->groupId);
         $result->received = $this->countOrdersReceived($result->userId, $result->groupId);
         $result->balance = $result->made - $result->received;
-        $result->lastOrder = $orderService->findLastForUser($result->userId);
+
+        $orderService = new Order($this->db);
+        $result->lastOrders = $orderService->findLastForUser($result->userId);
+
+        if ($includeUser) {
+            $userService = new User($this->db);
+            $result->user = $userService->findById($result->userId);
+        }
+
+        if ($includeGroup) {
+            $groupService = new Group($this->db);
+            $result->group = $groupService->findById($result->groupId);
+        }
     }
 }
