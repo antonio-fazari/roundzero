@@ -48,30 +48,24 @@
                         <select id="order-{{order.user.id}}-type"
                                 class="form-control input-sm"
                                 ng-change="changeType(order)"
-                                ng-model="order.type">
-                            <option value="Tea">Tea</option>
-                            <option value="Coffee">Coffee</option>
+                                ng-model="order.type"
+                                ng-options="o.key as o.value for o in typeOptions">
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="order-{{order.user.id}}-milk" class="sr-only">Milk</label>
                         <select id="order-{{order.user.id}}-milk"
                                 class="form-control input-sm"
-                                ng-model="order.milk">
-                            <option value="0">No milk</option>
-                            <option value="1">Some milk</option>
-                            <option value="2">Lots of milk</option>
+                                ng-model="order.milk"
+                                ng-options="o.key as o.value for o in milkOptions">
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="order-{{order.user.id}}-sugars" class="sr-only">Sugars</label>
                         <select id="order-{{order.user.id}}-sugars"
                                 class="form-control input-sm"
-                                ng-model="order.sugars">
-                            <option value="0">No sugar</option>
-                            <option value="1">1 sugar</option>
-                            <option value="2">2 sugars</option>
-                            <option value="3">3 sugars</option>
+                                ng-model="order.sugars"
+                                ng-options="o.key as o.value for o in sugarOptions">
                         </select>
                     </div>
                     <div class="form-group">
@@ -91,10 +85,7 @@
 
             <div class="list-group-item clearfix" ng-repeat="order in orders" ng-show="order.active">
                 <strong>{{order.user.name}}: </strong>
-                {{order.type}}
-                {{order.milk}}
-                {{order.sugars}}
-                {{order.notes}}
+                {{order.type}}, {{milkOptions[order.milk].value}}, {{sugarOptions[order.sugars].value}} - <em>{{order.notes}}</em>
             </div>
         </div>
         <button class="btn btn-primary btn-lg ladda-button"

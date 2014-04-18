@@ -52,6 +52,22 @@ angular.module('roundzeroApp')
             userId: AuthService.userId
         });
 
+        $scope.typeOptions = [
+            {key: 'Tea', value:'Tea'},
+            {key: 'Coffee', value:'Coffee'},
+        ];
+        $scope.milkOptions = [
+            {key: '0', value:'No milk'},
+            {key: '1', value:'Some milk'},
+            {key: '2', value:'Lots of milk'},
+        ];
+        $scope.sugarOptions = [
+            {key: '0', value:'No sugar'},
+            {key: '1', value:'1 sugar'},
+            {key: '2', value:'2 sugars'},
+            {key: '3', value:'3 sugars'},
+        ];
+
         $scope.submit = function () {
             $scope.setStateSubmitted();
 
